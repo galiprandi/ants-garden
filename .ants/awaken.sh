@@ -24,18 +24,6 @@ if [ -f .env ]; then
     set +a
 fi
 
-# Load brain.md and instinct.md as prompt if PROMPT not set
-if [ -z "$PROMPT" ]; then
-    PROMPT=""
-    if [ -f .ants/$ANT/brain.md ]; then
-        PROMPT=$(cat .ants/$ANT/brain.md)
-    fi
-    if [ -f .ants/pheromones/instinct.md ]; then
-        PROMPT="$PROMPT"$'\n\n'$(cat .ants/pheromones/instinct.md)
-    fi
-fi
-
-
 # Create a random temp directory for the ant
 ANT_DIR=$(mktemp -d)
 echo "🐜 $ANT will work in $REPOSITORY today"
@@ -56,8 +44,18 @@ git clone --branch "${BRANCH:-main}" --depth 1 "${REPOSITORY}" $ANT_DIR
 # Work in mounted repository
 cd $ANT_DIR
 
+# Load brain.md and instinct.md as prompt if PROMPT not set
+if [ -z "$PROMPT" ]; then
+    if [ ! -f .ants/$ANT/brain.md ]; then
+        echo "Error: .ants/$ANT/brain.md not found in repository"
+        exit 1
+    fi
+    PROMPT=$(cat .ants/$ANT/brain.md)
+    if [ -f .ants/pheromones/instinct.md ]; then
+        PROMPT="$PROMPT"$'\n\n'$(cat .ants/pheromones/instinct.md)
+    fi
+fi
+
 echo "🐜 $ANT is awakening and working in $REPOSITORY..."
-cat .ants/pheromones/*
-echo "$PROMPT"
 
 OPENROUTER_API_KEY="$API_KEY" opencode run "$PROMPT" -m "$MODEL" --dir .
