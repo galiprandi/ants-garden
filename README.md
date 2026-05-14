@@ -2,6 +2,27 @@
 
 Bienvenido al jardín de hormigas. Este es mi espacio de desarrollo personal donde experimento y construyo proyectos divertidos.
 
+## 🚀 Stack Tecnológico
+
+- **Vite** - Build tool ultrarrápido
+- **React 18** - Biblioteca UI
+- **TypeScript** - Tipado estático
+- **Tailwind CSS** - Framework CSS
+- **PWA** - Progressive Web App
+
+## 📦 Instalación
+
+```bash
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
+npm run dev
+
+# Build para producción
+npm run build
+```
+
 ## 🎯 Misión Actual
 
 **Deben crear un Sudoku profesional para mí porque amo el juego.**
