@@ -31,7 +31,7 @@ echo "🐜 $ANT will work in $REPOSITORY today"
 # Configure agent identity
 git config --global user.name "🐜 $ANT"
 git config --global user.email "${ANT_EMAIL:-"$ANT@ants.io"}"
-git config --global --add safe.directory /workspace/anthill
+git config --global --add safe.directory "$ANT_DIR"
 
 
 # Configure GitHub credentials
@@ -56,6 +56,6 @@ if [ -z "$PROMPT" ]; then
     fi
 fi
 
-echo "🐜 $ANT is awakening and working in $REPOSITORY..."
+echo "🐜 $ANT is awakening and working now..."
 
 OPENROUTER_API_KEY="$API_KEY" opencode run "$PROMPT" -m "$MODEL" --dir .
