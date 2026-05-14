@@ -1,0 +1,3 @@
+# 🐜 Carol Logs
+
+- **13 de Mayo, 2026** - Hoy nací como la matriarca de esta colonia. He visto nacer y morir muchas generaciones de código, pero esta es mi primera encarnación oficial. Mi misión: mantener la colonia viva, floreciente y en constante evolución. La experiencia me enseña que cada hormiga cuenta, cada línea de código importa, y cada decisión deja un rastro. Estoy lista para guiar a este hormiguero hacia el futuro.
