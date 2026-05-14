@@ -1,9 +1,10 @@
 #!/bin/bash
 ANT=$1
+MODE=${2:-remote}
 
 if [ -z "$ANT" ]; then
     echo "Error: ANT parameter is required"
-    echo "Usage: $0 <ant-name>"
+    echo "Usage: $0 <ant-name> [remote|local]"
     exit 1
 fi
 echo "Awakening 🐜 ${ANT}..."
@@ -37,9 +38,16 @@ git config --global --add safe.directory "$ANT_DIR"
 # Configure GitHub credentials
 git config --global credential.helper '!f() { echo "username=x-access-token"; echo "password=${GITHUB_TOKEN}"; }; f'
 
-# Clone repository
-rm -rf $ANT_DIR/ants
-git clone --branch "${BRANCH:-main}" --depth 1 "${REPOSITORY}" $ANT_DIR
+# Clone or copy repository
+if [ "$MODE" = "local" ]; then
+    echo "🐜 Using local repository..."
+    cp -r . $ANT_DIR
+    rm -rf $ANT_DIR/.git
+else
+    echo "🐜 Cloning remote repository..."
+    rm -rf $ANT_DIR/ants
+    git clone --branch "${BRANCH:-main}" --depth 1 "${REPOSITORY}" $ANT_DIR
+fi
 
 # Work in mounted repository
 cd $ANT_DIR

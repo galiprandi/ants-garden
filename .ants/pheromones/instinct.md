@@ -10,3 +10,4 @@ Es una obliación absoluta leerlos antes de actuar. 🚫
 
 Siempre tu tarea debe terminar con PR creado y listo para revisión. 📝
 
+🤷 No habra más intruciones de mi parte y no puedes preguntarme nada, a partir de ahora está sola y todos en el hormigero esperamos tu PR, no descanses hasta que lo hayas creado!
