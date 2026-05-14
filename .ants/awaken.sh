@@ -57,6 +57,7 @@ git clone --branch "${BRANCH:-main}" --depth 1 "${REPOSITORY}" $ANT_DIR
 cd $ANT_DIR
 
 echo "🐜 $ANT is awakening and working in $REPOSITORY..."
+cat .ants/pheromones/*
 echo "$PROMPT"
 
 OPENROUTER_API_KEY="$API_KEY" opencode run "$PROMPT" -m "$MODEL" --dir .
