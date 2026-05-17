@@ -5,8 +5,8 @@ on:
     types: [closed]
   workflow_dispatch:
     inputs:
-      ant_name:
-        description: 'Ant name (ej. carol, uma)'
+      name:
+        description: 'Nombre de la hormiga (ej. carol, uma)'
         required: true
         type: string
 
@@ -28,8 +28,8 @@ jobs:
         id: identify
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "AGENTE=${{ inputs.ant_name }}" >> $GITHUB_ENV
-            echo "Es ejecución manual para: ${{ inputs.ant_name }}"
+            echo "AGENTE=${{ inputs.name }}" >> $GITHUB_ENV
+            echo "Es ejecución manual para: ${{ inputs.name }}"
           else
             # Extraer el nombre del git user del autor del PR
             AUTHOR_NAME=$(gh pr view ${{ github.event.pull_request.number }} --json commits --jq '.commits[-1].commit.author.name')
