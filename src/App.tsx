@@ -28,7 +28,7 @@ function App() {
               className="group relative w-full overflow-hidden rounded-xl bg-emerald-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:bg-emerald-700 hover:shadow-emerald-200 active:scale-[0.98]"
             >
               <span className="relative z-10">Contador: {count}</span>
-              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] transition-transform" />
             </button>
             
             <div className="pt-4 border-t border-emerald-50">
