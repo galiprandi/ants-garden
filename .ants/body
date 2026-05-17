@@ -1,17 +1,18 @@
-FROM openeuler/opencode
+FROM node:20-slim
 
 WORKDIR /workspace
 
-# Install GitHub CLI (cached layer)
-RUN dnf install -y curl && \
+# 🧰 Install
+RUN apt-get update && \
+    apt-get install -y curl jq git && \
     curl -fsSL https://github.com/cli/cli/releases/download/v2.50.0/gh_2.50.0_linux_amd64.tar.gz -o gh.tar.gz && \
     tar -xzf gh.tar.gz && \
     mv gh_2.50.0_linux_amd64/bin/gh /usr/local/bin/gh && \
     rm -rf gh.tar.gz gh_2.50.0_linux_amd64 && \
-    dnf clean all
+    curl -fsSL https://opencode.ai/install | bash && \
+    ln -sf /root/.opencode/bin/opencode /usr/local/bin/opencode && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY .ants /workspace/.ants
-COPY .ants/awaken.sh /usr/local/bin/awaken.sh
-RUN chmod +x /usr/local/bin/awaken.sh
-
-ENTRYPOINT ["awaken.sh"]
+ENTRYPOINT ["/workspace/.ants/awaken.sh"]
