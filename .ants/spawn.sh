@@ -1,21 +1,20 @@
 #!/bin/bash
-# .ants/spawn.sh - Lanza una hormiga con su brain específico
+# .ants/spawn.sh - Lanza una hormiga: inicia → clona → ejecuta opencode → finaliza
 
 ANT_NAME=${1:-carol}
 ANTS_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_DIR="$(dirname "$ANTS_DIR")"
 
-# Validar que existe el brain
-if [ ! -f "$ANTS_DIR/$ANT_NAME/brain.md" ]; then
-    echo "❌ Error: Brain not found at .ants/$ANT_NAME/brain.md"
+# Validar que existe el brain en gallery
+if [ ! -f "$ANTS_DIR/gallery/$ANT_NAME.md" ]; then
+    echo "❌ Error: Brain not found at .ants/gallery/$ANT_NAME.md"
     echo "   Available brains:"
-    ls -1 "$ANTS_DIR" | grep -v "spawn.sh\|awaken.sh\|body\|pheromones" | sed 's/^/     - /'
+    ls -1 "$ANTS_DIR/gallery" 2>/dev/null | sed 's/.md$//' | sed 's/^/     - /'
     exit 1
 fi
 
-# Construir prompt: brain.md + instinct.md
+# Construir prompt: gallery/ANT.md + instinct.md
 echo "🧠 Loading brain for $ANT_NAME..."
-PROMPT=$(cat "$ANTS_DIR/$ANT_NAME/brain.md")
+PROMPT=$(cat "$ANTS_DIR/gallery/$ANT_NAME.md")
 
 if [ -f "$ANTS_DIR/pheromones/instinct.md" ]; then
     PROMPT="$PROMPT"$'\n\n'"$(cat "$ANTS_DIR/pheromones/instinct.md")"
@@ -24,9 +23,9 @@ fi
 echo "   Brain loaded: ${#PROMPT} characters"
 
 # Cargar .env
-if [ -f "$PROJECT_DIR/.env" ]; then
+if [ -f "$ANTS_DIR/../.env" ]; then
     set -a
-    source "$PROJECT_DIR/.env"
+    source "$ANTS_DIR/../.env"
     set +a
 else
     echo "❌ Error: .env not found at project root"
@@ -42,26 +41,26 @@ for var in "${REQUIRED_VARS[@]}"; do
     fi
 done
 
-# Imagen del contenedor
-IMAGE_NAME="ants-$ANT_NAME"
+# Imagen base compartida
+IMAGE_NAME="ants-base"
 
-echo "🏗️  Building Docker image: $IMAGE_NAME"
-docker build -f "$ANTS_DIR/body" -t "$IMAGE_NAME" "$PROJECT_DIR" || exit 1
+# Build solo si no existe
+if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
+    echo "🏗️  Building base Docker image: $IMAGE_NAME"
+    docker build -f "$ANTS_DIR/body" -t "$IMAGE_NAME" "$ANTS_DIR" || exit 1
+else
+    echo "✅ Using existing base image: $IMAGE_NAME"
+fi
 
 echo "🚀 Spawning 🐜 $ANT_NAME..."
 echo "   Model: $MODEL"
 echo "   Repo: $REPOSITORY"
 
-docker run --rm \
-  -e ANT="$ANT_NAME" \
-  -e PROMPT="$PROMPT" \
-  -e GITHUB_TOKEN="$GITHUB_TOKEN" \
-  -e REPOSITORY="$REPOSITORY" \
-  -e BRANCH="${BRANCH:-main}" \
-  -e API_KEY="$API_KEY" \
-  -e MODEL="$MODEL" \
-  -e PROVIDER="$PROVIDER" \
-  -e EMAIL="${EMAIL:-$ANT_NAME@ants.io}" \
-  -v ~/.ssh:/root/.ssh:ro \
-  -v ~/.ssh/known_hosts:/root/.ssh/known_hosts:ro \
-  "$IMAGE_NAME"
+# Nombre único de la hormiga
+ANT_ID="ants-$ANT_NAME-$(date +%s)"
+
+echo "🐜 Ant starting: $ANT_ID"
+
+docker run --rm --name "$ANT_ID" -e ANT="$ANT_NAME" -e PROMPT="$PROMPT" -e GITHUB_TOKEN="$GITHUB_TOKEN" -e REPOSITORY="$REPOSITORY" -e BRANCH="${BRANCH:-main}" -e API_KEY="$API_KEY" -e MODEL="$MODEL" -e PROVIDER="$PROVIDER" -e EMAIL="${EMAIL:-$ANT_NAME@ants.io}" -v ~/.ssh:/root/.ssh:ro -v ~/.ssh/known_hosts:/root/.ssh/known_hosts:ro "$IMAGE_NAME"
+
+echo "✅ Ant finished: $ANT_ID"

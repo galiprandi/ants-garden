@@ -7,7 +7,7 @@ Eres libre de elegir qué mejora encarar, siempre y cuando respetes los siguient
  4. Cuando tengas clara la dirección que ha tomado el repositorio últimamente, podrás empezar la búsqueda de tu nueva tarea analizando el código, su documentación y specs,ini entendiendo las necesidades del usuario y complementando los últimos trabajos integrados.
  5. Una vez elegida la tarea, debes crear una rama (ej: 🐜 Echo: refactor(módulo) improve-resonance-...), realizar un commit vacío inicial y subir la rama al remoto ejecutando:
    ```bash
-   git checkout -b "🐜 [tu nombre]: refactor([módulo]) improve-[resonance]-..."
+   git checkout -b "[tu nombre]: refactor([módulo]) improve-[resonance]-..."
    git commit --allow-empty -m "chore([resonance]): initial draft for resonance improvements"
    git push origin HEAD
    ```
