@@ -1,27 +1,14 @@
-import { useState } from 'react'
+import SudokuContainer from './components/Sudoku/SudokuContainer'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center">
-      <div className="text-center p-8 bg-white rounded-2xl shadow-xl max-w-md">
-        <h1 className="text-4xl font-bold text-emerald-800 mb-4">🐜 Ants Garden</h1>
-        <p className="text-gray-600 mb-6">Bienvenido al jardín de hormigas</p>
-        
-        <div className="space-y-4">
-          <button 
-            onClick={() => setCount((count) => count + 1)}
-            className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium"
-          >
-            Contador: {count}
-          </button>
-          
-          <div className="text-sm text-gray-500">
-            <p>Vite + React + TypeScript + PWA</p>
-            <p className="mt-2">Listo para construir algo grande 🐜✨</p>
-          </div>
-        </div>
+    <div className="min-h-screen bg-[#f0f4f0] bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:20px_20px] flex items-center justify-center p-4">
+      {/* Decorative background elements */}
+      <div className="fixed -top-24 -right-24 h-96 w-96 rounded-full bg-emerald-100/40 blur-3xl pointer-events-none" />
+      <div className="fixed -bottom-24 -left-24 h-96 w-96 rounded-full bg-amber-100/30 blur-3xl pointer-events-none" />
+      
+      <div className="relative z-10 w-full max-w-2xl">
+        <SudokuContainer />
       </div>
     </div>
   )
