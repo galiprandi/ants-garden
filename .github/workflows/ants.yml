@@ -77,7 +77,7 @@ jobs:
         run: |
           git config --global user.name "🐜 ${{ env.AGENTE }}"
           git config --global user.email "${{ env.AGENTE }}@ants.io"
-          npm install -g opencode
+          curl -fsSL https://opencode.ai/install | bash
           npm install
 
       # 4. EJECUCIÓN
