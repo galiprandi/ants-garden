@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       ant_name:
-        description: 'Nombre de la hormiga (ej. carol, uma)'
+        description: 'Ant name (ej. carol, uma)'
         required: true
         type: string
 
@@ -20,11 +20,11 @@ jobs:
     
     steps:
       # 0. CHECKOUT (Requerido antes de usar gh)
-      - name: Checkout del repositorio
+      - name: 🏠 Entering the Colony
         uses: actions/checkout@v4
 
       # 1. DETECCIÓN DEL AGENTE (por name)
-      - name: Identificar Hormiga
+      - name: 🕵 Identifying Ant
         id: identify
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
@@ -43,7 +43,7 @@ jobs:
           fi
 
       # 2. VALIDACIÓN DE PRs ABIERTOS
-      - name: Validar PRs Abiertos
+      - name: 🔍 Scouting Territory
         id: validator
         run: |
           ANT="${{ env.AGENTE }}"
@@ -60,20 +60,20 @@ jobs:
           echo "✅ Validación pasada: $OPEN_PRS PR(s) abierto(s) de $ANT"
 
       # 3. SETUP Y CONFIGURACIÓN
-      - name: Setup Node.js
+      - name: 🛠️ Gathering Tools
         uses: actions/setup-node@v4
         with:
           node-version: '24'
 
-      - name: Validar existencia de archivo .md
+      - name: 📜 Checking Brain
         run: |
-          FILE=".ants/gallery/${{ env.AGENTE }}.md"
+          FILE=".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md"
           if [ ! -f "$FILE" ]; then
             echo "❌ Error: El archivo $FILE no existe."
             exit 1
           fi
 
-      - name: Configurar Git y OpenCode
+      - name: ⚙️ Preparing Workstation
         run: |
           git config --global user.name "🐜 ${{ env.AGENTE }}"
           git config --global user.email "${{ env.AGENTE }}@ants.io"
@@ -81,9 +81,9 @@ jobs:
           npm install
 
       # 4. EJECUCIÓN
-      - name: Run OpenCode Agent
+      - name: 🐜 Awakening Ant
         run: |
-          opencode run ".ants/gallery/${{ env.AGENTE }}.md"
+          opencode run ".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md"
         env:
           API_KEY: ${{ secrets.ANTS_AI_KEY }}
           MODEL: ${{ secrets.ANTS_AI_MODEL }}
