@@ -1,0 +1,88 @@
+name: 🐜 Ants
+
+on:
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      ant_name:
+        description: 'Nombre de la hormiga (ej. carol, uma)'
+        required: true
+        type: string
+
+jobs:
+  ant-process:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    
+    steps:
+      # 1. DETECCIÓN DEL AGENTE
+      - name: Identificar Hormiga
+        id: identify
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "AGENTE=${{ inputs.ant_name }}" >> $GITHUB_ENV
+            echo "Es ejecución manual para: ${{ inputs.ant_name }}"
+          else
+            # Extraer del email del autor del PR
+            # Nota: Usamos la API de GitHub para obtener el email del autor del PR de forma fiable
+            AUTHOR_EMAIL=$(gh pr view ${{ github.event.pull_request.number }} --json author --jq '.author.login') # Opcional: usar login si el email no es público
+            # Si prefieres seguir con el email configurado en el git user de la hormiga:
+            # AUTHOR_EMAIL=$(curl -s -H "Authorization: token $GH_TOKEN" ${{ github.event.pull_request.url }}/commits | jq -r '.[-1].commit.author.email')
+            
+            # Para este ejemplo, supongamos que el login de GitHub coincide o extraemos del email si está disponible
+            # Ajustamos aquí para extraer el nombre antes del @ants.io si el email es visible
+            EMAIL_RAW=$(gh pr view ${{ github.event.pull_request.number }} --json author --jq '.author.email // empty')
+            if [[ "$EMAIL_RAW" == *@ants.io ]]; then
+              echo "AGENTE=$(echo $EMAIL_RAW | cut -d'@' -f1)" >> $GITHUB_ENV
+            else
+              # Fallback al username si el email está oculto
+              echo "AGENTE=${{ github.event.pull_request.user.login }}" >> $GITHUB_ENV
+            fi
+          fi
+
+      # 2. VALIDACIÓN PREVIA (Sin instalar nada pesado)
+      - name: Validar Límites y Estado
+        id: validator
+        run: |
+          ANT="${{ env.AGENTE }}"
+          echo "Validando para la hormiga: $ANT"
+
+          # Contar PRs cerrados/mezclados de esta hormiga
+          # Filtramos por el autor del PR actual
+          COUNT=$(gh pr list --state closed --author "${{ github.event.pull_request.user.login }}" --limit 10 --json number --jq '. | length')
+          
+          if [ "$COUNT" -ge 2 ]; then
+            echo "🚨 La hormiga $ANT ya tiene $COUNT PRs. Límite >= 2 alcanzado. Abortando."
+            exit 1
+          fi
+
+          # Verificar si hay otros PRs abiertos de esta misma hormiga (Ready o Draft)
+          OPEN_PRS=$(gh pr list --state open --author "${{ github.event.pull_request.user.login }}" --json number --jq '. | length')
+          if [ "$OPEN_PRS" -gt 0 ]; then
+             echo "ℹ️ Hay $OPEN_PRS PR(s) abiertos de $ANT. Continuando según lógica..."
+          fi
+
+      # 3. CHECKOUT Y CONFIGURACIÓN (Solo si las validaciones pasaron)
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Validar existencia de archivo .md
+        run: |
+          FILE=".ants/gallery/${{ env.AGENTE }}.md"
+          if [ ! -f "$FILE" ]; then
+            echo "❌ Error: El archivo $FILE no existe."
+            exit 1
+          fi
+
+      - name: Configurar Git y OpenCode
+        run: |
+          git config --global user.name "${{ env.AGENTE }}"
+          git config --global user.email "${{ env.AGENTE }}@ants.io"
+          npm install -g opencode
+
+      # 4. EJECUCIÓN
+      - name: Run OpenCode Agent
+        run: |
+          opencode run ".ants/gallery/${{ env.AGENTE }}.md"
