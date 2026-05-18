@@ -25,10 +25,7 @@ jobs:
     steps:
       # 0. CHECKOUT (Requerido antes de usar gh)
       - name: 🏠 Entering the Colony
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          persist-credentials: false
+        uses: actions/checkout@v4
 
       # 1. DETECCIÓN DEL AGENTE (por name)
       - name: 🕵 Identifying Ant
@@ -67,7 +64,12 @@ jobs:
           echo "✅ Validación pasada: $OPEN_PRS PR(s) abierto(s) de $ANT"
 
       # 3. SETUP Y CONFIGURACIÓN
-      - name:  Checking Brain
+      - name: 🛠️ Gathering Tools
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: 📜 Checking Brain
         run: |
           FILE=".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md"
           if [ ! -f "$FILE" ]; then
@@ -79,12 +81,12 @@ jobs:
         run: |
           git config --global user.name "🐜 ${{ env.AGENTE }}"
           git config --global user.email "${{ env.AGENTE }}@ants.io"
+          bun install -g opencode-ai
+          bun install
 
       # 4. EJECUCIÓN
       - name: 🐜 Awakening Ant
-        uses: anomalyco/opencode/github@latest
+        run: |
+          opencode run ".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md" -m "${{ secrets.ANTS_AI_MODEL }}"
         env:
           OPENCODE_API_KEY: ${{ secrets.ANTS_AI_KEY }}
-        with:
-          model: ${{ secrets.ANTS_AI_MODEL }}
-          input: ".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md"
