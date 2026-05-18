@@ -81,8 +81,8 @@ jobs:
         run: |
           git config --global user.name "🐜 ${{ env.AGENTE }}"
           git config --global user.email "${{ env.AGENTE }}@ants.io"
-          bun install -g opencode-ai
-          bun install
+        # bun install -g opencode-ai
+        # bun install
 
       - name: 🐜 Awakening Ant
         uses: 'google-github-actions/run-gemini-cli@a3bf79042542528e91937b3a3a6fbc4967ee3c31'
