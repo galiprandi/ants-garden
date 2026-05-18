@@ -1,0 +1,21 @@
+name: 🤖 Gemini Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-gemini:
+    name: Test Gemini
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test Gemini
+        uses: google-github-actions/run-gemini-cli@v0
+        with:
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+          prompt: saluda
