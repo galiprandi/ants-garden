@@ -12,7 +12,7 @@ on:
 
 jobs:
   ant-process:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     env:
       GH_TOKEN: ${{ github.token }}
       ANTS_AI_KEY: ${{ secrets.ANTS_AI_KEY }}
@@ -61,9 +61,9 @@ jobs:
 
       # 3. SETUP Y CONFIGURACIÓN
       - name: 🛠️ Gathering Tools
-        uses: actions/setup-node@v4
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: '24'
+          bun-version: latest
 
       - name: 📜 Checking Brain
         run: |
@@ -77,8 +77,8 @@ jobs:
         run: |
           git config --global user.name "🐜 ${{ env.AGENTE }}"
           git config --global user.email "${{ env.AGENTE }}@ants.io"
-          npm install -g opencode-ai
-          npm install
+          bun install -g opencode-ai
+          bun install
 
       # 4. EJECUCIÓN
       - name: 🐜 Awakening Ant
