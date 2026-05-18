@@ -84,9 +84,8 @@ jobs:
           bun install -g opencode-ai
           bun install
 
-      # 4. EJECUCIÓN
       - name: 🐜 Awakening Ant
         run: |
-          opencode run "Saluda a todos" -m "${{ secrets.ANTS_AI_MODEL }}"
+          opencode run "Saluda a todos" -m "google/gemma-4-26b-a4b-it"
         env:
           OPENCODE_API_KEY: ${{ secrets.ANTS_AI_KEY }}
