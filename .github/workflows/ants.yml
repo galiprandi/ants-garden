@@ -13,6 +13,9 @@ on:
 jobs:
   ant-process:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
     env:
       GH_TOKEN: ${{ github.token }}
       ANTS_AI_KEY: ${{ secrets.ANTS_AI_KEY }}
