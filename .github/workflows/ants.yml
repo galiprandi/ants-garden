@@ -85,16 +85,31 @@ jobs:
           bun install
 
       - name: 🐜 Awakening Ant
+        id: ant-brain
         run: |
-          export OPENCODE_API_KEY=${{ secrets.ANTS_AI_KEY }}
-          export OPENCODE_MODEL=google/gemma-4-26b-a4b-it
-          opencode run "Saluda a todos"
+          BRAIN_FILE=".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md"
+          echo "brain_file=$BRAIN_FILE" >> $GITHUB_OUTPUT
+          cat "$BRAIN_FILE"
 
-      - name: Run OpenCode
-        uses: anomalyco/opencode/github@latest
+      - name: 🐜 Awakening Ant
+        uses: google-github-actions/run-gemini-cli@v0
         env:
-          GOOGLE_API_KEY: ${{ secrets.ANTS_AI_KEY }}
+          GEMINI_CLI_TRUST_WORKSPACE: true
         with:
-          model: google/gemma-4-26b-a4b-it
-          prompt: |
-            Cuenta un cuento corto de 50 palabras sobre una hormiga que descubre un tesoro en su colonia.
+          gemini_api_key: ${{ secrets.ANTS_AI_KEY }}
+          prompt: ${{ steps.ant-brain.outputs.brain_file }}
+
+      # - name: 🐜 Awakening Ant
+      #   run: |
+      #     export OPENCODE_API_KEY=${{ secrets.ANTS_AI_KEY }}
+      #     export OPENCODE_MODEL=google/gemma-4-26b-a4b-it
+      #     opencode run "Saluda a todos"
+
+      # - name: Run OpenCode
+      #   uses: anomalyco/opencode/github@latest
+      #   env:
+      #     GOOGLE_API_KEY: ${{ secrets.ANTS_AI_KEY }}
+      #   with:
+      #     model: google/gemma-4-26b-a4b-it
+      #     prompt: |
+      #       Cuenta un cuento corto de 50 palabras sobre una hormiga que descubre un tesoro en su colonia.
