@@ -87,6 +87,6 @@ jobs:
       # 4. EJECUCIÓN
       - name: 🐜 Awakening Ant
         run: |
-          opencode run ".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md" -m "${{ secrets.ANTS_AI_MODEL }}"
+          opencode run "Saluda a todos" -m "${{ secrets.ANTS_AI_MODEL }}"
         env:
           OPENCODE_API_KEY: ${{ secrets.ANTS_AI_KEY }}
