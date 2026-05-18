@@ -85,4 +85,4 @@ jobs:
         run: |
           opencode run ".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md" -m "${{ secrets.ANTS_AI_MODEL }}"
         env:
-          ANTS_AI_KEY: ${{ secrets.ANTS_AI_KEY }}
+          API_KEY: ${{ secrets.ANTS_AI_KEY }}
