@@ -85,10 +85,11 @@ jobs:
           bun install
 
       - name: 🐜 Awakening Ant
-        run: |
-          BRAIN_FILE=".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md"
-          cp "$BRAIN_FILE" /tmp/brain.md
-          npx -y @google/gemini-cli --prompt "$(cat /tmp/brain.md)" --api-key "${{ secrets.ANTS_AI_KEY }}"
+        uses: 'google-github-actions/run-gemini-cli@a3bf79042542528e91937b3a3a6fbc4967ee3c31'
+        with:
+          gemini_api_key: ${{ secrets.ANTS_AI_KEY }}
+          prompt: |
+            .ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md
 
       # - name: 🐜 Awakening Ant
       #   run: |
