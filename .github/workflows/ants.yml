@@ -86,7 +86,7 @@ jobs:
 
       - name: 🐜 Awakening Ant
         run: |
-          opencode run "Saluda a todos" 
+          export OPENCODE_API_KEY=${{ secrets.ANTS_AI_KEY }}
+          opencode run "Saluda a todos" -m google/gemma-4-26b-a4b-it
         env:
-          OPENCODE_API_KEY: ${{ secrets.ANTS_AI_KEY }}
           model: google/gemma-4-26b-a4b-it
