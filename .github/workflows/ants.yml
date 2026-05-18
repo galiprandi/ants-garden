@@ -89,3 +89,4 @@ jobs:
           opencode run "Saluda a todos" 
         env:
           OPENCODE_API_KEY: ${{ secrets.ANTS_AI_KEY }}
+          model: google/gemma-4-26b-a4b-it
