@@ -85,34 +85,10 @@ jobs:
           bun install
 
       - name: 🐜 Awakening Ant
-        id: ant-brain
         run: |
           BRAIN_FILE=".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md"
-          echo "brain_file=$BRAIN_FILE" >> $GITHUB_OUTPUT
-          DELIMITER="BRAIN_DELIMITER_$(date +%s)_$(openssl rand -hex 8)"
-          {
-            echo "brain_content<<$DELIMITER"
-            cat "$BRAIN_FILE"
-            echo "$DELIMITER"
-          } >> $GITHUB_OUTPUT
-
-      - name: 🐜 Awakening Ant
-        uses: google-github-actions/run-gemini-cli@v0
-        env:
-          GEMINI_CLI_TRUST_WORKSPACE: true
-        with:
-          gemini_api_key: ${{ secrets.ANTS_AI_KEY }}
-          settings: |-
-            {
-              "coreTools": [
-                "run_shell_command(gh issue list)",
-                "run_shell_command(gh pr list)",
-                "run_shell_command(gh search issues)",
-                "run_shell_command(gh search prs)"
-              ]
-            }
-          prompt: |-
-            ${{ steps.ant-brain.outputs.brain_content }}
+          cp "$BRAIN_FILE" /tmp/brain.md
+          npx -y @google/gemini-cli --prompt "$(cat /tmp/brain.md)" --api-key "${{ secrets.ANTS_AI_KEY }}"
 
       # - name: 🐜 Awakening Ant
       #   run: |
