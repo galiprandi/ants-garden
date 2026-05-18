@@ -102,7 +102,17 @@ jobs:
           GEMINI_CLI_TRUST_WORKSPACE: true
         with:
           gemini_api_key: ${{ secrets.ANTS_AI_KEY }}
-          prompt: ${{ steps.ant-brain.outputs.brain_content }}
+          settings: |-
+            {
+              "coreTools": [
+                "run_shell_command(gh issue list)",
+                "run_shell_command(gh pr list)",
+                "run_shell_command(gh search issues)",
+                "run_shell_command(gh search prs)"
+              ]
+            }
+          prompt: |-
+            ${{ steps.ant-brain.outputs.brain_content }}
 
       # - name: 🐜 Awakening Ant
       #   run: |
