@@ -89,3 +89,12 @@ jobs:
           export OPENCODE_API_KEY=${{ secrets.ANTS_AI_KEY }}
           export OPENCODE_MODEL=google/gemma-4-26b-a4b-it
           opencode run "Saluda a todos"
+
+      - name: Run OpenCode
+        uses: anomalyco/opencode/github@latest
+        env:
+          GEMINI_API_KEY: ${{ secrets.ANTS_AI_KEY }}
+        with:
+          model: google/gemma-4-26b-a4b-it
+          prompt: |
+            Cuenta un cuento corto de 50 palabras sobre una hormiga que descubre un tesoro en su colonia.
