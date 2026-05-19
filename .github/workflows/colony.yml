@@ -102,6 +102,9 @@ jobs:
           prompt: ${{ steps.ant-brain.outputs.prompt }}
           settings: |-
               {
+                "approvalMode": "yolo",
+                "debug": true,
+                "outputFormat": "stream-json",
                 "model": {
                   "maxSessionTurns": 75,
                   "temperature": 0.7
