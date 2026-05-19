@@ -64,6 +64,7 @@ jobs:
           # Normalize file name to lowercase
           FILE_NAME=$(echo "${{ env.AGENT }}" | tr '[:upper:]' '[:lower:]')
           BRAIN_FILE=".ants/gallery/${FILE_NAME}.md"
+          INSTINCT_FILE=".ants/pheromones/instinct.md"
           
           if [ ! -f "$BRAIN_FILE" ]; then 
             echo "❌ Error: Memory $BRAIN_FILE not found in gallery."
@@ -75,10 +76,16 @@ jobs:
             echo "prompt<<EOF"
             cat "$BRAIN_FILE"
             echo ""
+            if [ -f "$INSTINCT_FILE" ]; then
+              echo "---"
+              echo "System Instincts:"
+              cat "$INSTINCT_FILE"
+            fi
+            echo ""
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
           
-          echo "🧠 $FILE_NAME memory loaded into ganglia."
+          echo "🧠 $FILE_NAME memory and instincts loaded into ganglia."
 
       - name: 🐜 Awakening the Drone
         uses: 'google-github-actions/run-gemini-cli@v0'
@@ -88,6 +95,38 @@ jobs:
           gemini_api_key: ${{ secrets.ANTS_AI_KEY }}
           gemini_model: 'gemma-4-26b-a4b-it'
           prompt: ${{ steps.ant-brain.outputs.prompt }}
+          settings: |-
+              {
+                "model": {
+                  "maxSessionTurns": 25
+                },
+                "telemetry": {
+                  "enabled": true,
+                  "target": "local",
+                  "outfile": ".gemini/telemetry.log"
+                },
+                "mcpServers": {
+                  "github": {
+                    "command": "docker",
+                    "args": [
+                      "run",
+                      "-i",
+                      "--rm",
+                      "-e",
+                      "GITHUB_PERSONAL_ACCESS_TOKEN",
+                      "ghcr.io/github/github-mcp-server:v0.27.0"
+                    ],
+                    "env": {
+                      "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+                    }
+                  }
+                },
+                "tools": {
+                  "core": []
+                }
+              }
+          extensions: |
+            []
 
       - name: 🏁 Mission Accomplished
         run: echo "🍂 Collection finished for ${{ env.AGENT }}."
