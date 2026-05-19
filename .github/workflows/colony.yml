@@ -100,6 +100,7 @@ jobs:
           gemini_api_key: ${{ secrets.ANTS_AI_KEY }}
           gemini_model: ${{ github.event.inputs.model || 'gemma-4-26b-a4b-it' }}
           prompt: ${{ steps.ant-brain.outputs.prompt }}
+          upload_artifacts: true
           settings: |-
               {
                 "approvalMode": "yolo",
@@ -165,7 +166,46 @@ jobs:
           extensions: |
             []
 
-      - name: 🔍 Debug Gemini CLI Output
+      - name: 📊 Upload Telemetry
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: ant-telemetry-${{ env.AGENT }}
+          path: .gemini/telemetry.log
+          if-no-files: warn
+
+      - name: 📋 Job Summary
+        if: always()
+        run: |
+          echo "## 🐜 Ant Mission Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Agent:** ${{ env.AGENT }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Model:** ${{ github.event.inputs.model || 'gemma-4-26b-a4b-it' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Environment" >> $GITHUB_STEP_SUMMARY
+          echo "- Runner: \`${{ runner.os }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Workspace: \`${{ github.workspace }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "- Approval Mode: \`yolo\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Max Session Turns: \`75\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Temperature: \`0.7\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Debug: \`true\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Output Format: \`stream-json\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### MCP Servers" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ git (uvx)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ github (docker)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ filesystem (npx)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ shell (npx)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ playwright (npx)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 [Telemetry](../actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "- � [Gemini Artifacts](../actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+
+      - name: �🔍 Debug Gemini CLI Output
         if: always()
         run: |
           echo "=== Gemini CLI Response ==="
