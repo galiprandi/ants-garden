@@ -162,5 +162,14 @@ jobs:
           extensions: |
             []
 
+      - name: 🔍 Debug Gemini CLI Output
+        if: always()
+        run: |
+          echo "=== Gemini CLI Response ==="
+          echo "${{ steps.ant-brain.outputs.gemini_response }}"
+          echo ""
+          echo "=== Gemini CLI Errors ==="
+          echo "${{ steps.ant-brain.outputs.gemini_errors }}"
+
       - name: 🏁 Mission Accomplished
         run: echo "🍂 Collection finished for ${{ env.AGENT }}."
