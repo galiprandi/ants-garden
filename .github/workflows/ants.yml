@@ -18,6 +18,7 @@ jobs:
       pull-requests: write
       contents: write
     env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       GH_TOKEN: ${{ github.token }}
       ANTS_AI_KEY: ${{ secrets.ANTS_AI_KEY }}
       ANTS_AI_MODEL: ${{ secrets.ANTS_AI_MODEL }}
@@ -25,7 +26,7 @@ jobs:
     steps:
       # 0. CHECKOUT (Requerido antes de usar gh)
       - name: 🏠 Entering the Colony
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # 1. DETECCIÓN DEL AGENTE (por name)
       - name: 🕵 Identifying Ant
