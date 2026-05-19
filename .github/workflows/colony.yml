@@ -141,6 +141,9 @@ jobs:
                   "target": "local",
                   "outfile": ".gemini/telemetry.log"
                 },
+                "mcp": {
+                  "allowed": ["git", "github", "filesystem", "shell", "playwright", "brave-search"]
+                },
                 "mcpServers": {
                   "git": {
                     "args": [
