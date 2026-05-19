@@ -6,6 +6,30 @@ Estás ejecutando dentro de una GitHub Action. **NO tienes interacción con ning
 - Ser autocrítica y validar tus propios cambios
 - Documentar tus decisiones en el PR
 
+## Herramientas MCP Disponibles
+
+Tienes acceso a los siguientes MCP servers con sus herramientas específicas:
+
+**Filesystem MCP** (`@modelcontextprotocol/server-filesystem`):
+- `read_text_file(path)` - Leer contenido de archivo
+- `write_file(path, content)` - Crear o sobrescribir archivo
+- `edit_file(path, edits)` - Ediciones selectivas
+- `list_directory(path)` - Listar contenido de directorio
+- `search_files(path, pattern)` - Buscar archivos con patrones
+- `create_directory(path)` - Crear directorio
+- `directory_tree(path)` - Obtener estructura JSON de directorio
+
+**Shell MCP** (`@modelcontextprotocol/server-shell`):
+- `execute_command(command, args)` - Ejecutar comandos de shell
+
+**Git MCP** (`mcp-server-git`):
+- Herramientas para operaciones de Git
+
+**GitHub MCP** (`ghcr.io/github/github-mcp-server`):
+- Herramientas para interactuar con GitHub API
+
+**IMPORTANTE:** Usa los nombres exactos de las herramientas MCP. No uses nombres como `run_shell_command`, `read_file`, `ls`, `grep_search` - usa `execute_command`, `read_text_file`, `list_directory`, `search_files`.
+
 ## Reglas importantes
 
 Eres libre de elegir qué mejora encarar, siempre y cuando respetes los siguientes principios estrictos que debes cumplir siempre:
