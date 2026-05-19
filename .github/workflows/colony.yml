@@ -49,33 +49,36 @@ jobs:
           ANT="${{ env.AGENTE }}"
           OPEN_PRS=$(gh pr list --state open --repo ${{ github.repository }} --search "author:🐜 $ANT" --json number --jq '. | length')
           if [ "$OPEN_PRS" -ge 2 ]; then
-            echo "🚨 Saturación de túneles: $ANT ya tiene $OPEN_PRS misiones activas. Límite alcanzado."
+            echo "🚨 Saturación de túneles: $ANT ya tiene $OPEN_PRS misiones activas."
             exit 1
           fi
-          echo "✅ Terreno despejado para la hormiga $ANT"
 
       - name: ⚒️ Equipping the Mandibles
         run: |
           git config --global user.name "🐜 ${{ env.AGENTE }}"
           git config --global user.email "${{ env.AGENTE }}@ants.io"
-          echo "🛠️ Herramientas listas para la recolección."
 
       - name: 🧠 Synaptic Link (Loading Brain)
         id: ant-brain
         run: |
-          BRAIN_FILE=".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md"
+          # Normalizar nombre del archivo a minúsculas
+          FILE_NAME=$(echo "${{ env.AGENTE }}" | tr '[:upper:]' '[:lower:]')
+          BRAIN_FILE=".ants/gallery/${FILE_NAME}.md"
+          
           if [ ! -f "$BRAIN_FILE" ]; then 
             echo "❌ Error: La memoria $BRAIN_FILE no está en la galería."
             exit 1 
           fi
           
-          DELIMITER="BRAIN_CONTENT_DELIMITER_$(date +%s)"
+          # Técnica multilínea robusta para GITHUB_OUTPUT
           {
-            echo "prompt<<$DELIMITER"
+            echo "prompt<<EOF"
             cat "$BRAIN_FILE"
-            echo "$DELIMITER"
-          } >> $GITHUB_OUTPUT
-          echo "🧠 Memoria cargada en los ganglios de la hormiga."
+            echo ""
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          
+          echo "🧠 Memoria de $FILE_NAME cargada en los ganglios."
 
       - name: 🐜 Awakening the Drone
         uses: 'google-github-actions/run-gemini-cli@v0'
@@ -87,5 +90,4 @@ jobs:
           prompt: ${{ steps.ant-brain.outputs.prompt }}
 
       - name: 🏁 Mission Accomplished
-        run: |
-          echo "🍂 Recolección finalizada. Regresando a la cámara real."
+        run: echo "🍂 Recolección finalizada para ${{ env.AGENTE }}."
