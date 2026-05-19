@@ -173,6 +173,28 @@ jobs:
           echo ""
           echo "=== Gemini CLI Errors ==="
           echo "${{ steps.ant-brain.outputs.gemini_errors }}"
+          echo ""
+          echo "=== Temporary Files Check ==="
+          if [ -d gemini-artifacts ]; then
+            echo "Artifacts directory exists"
+            ls -la gemini-artifacts/
+            echo ""
+            echo "=== STDERR Content ==="
+            if [ -f gemini-artifacts/stderr.log ]; then
+              cat gemini-artifacts/stderr.log
+            else
+              echo "stderr.log not found"
+            fi
+            echo ""
+            echo "=== STDOUT Content ==="
+            if [ -f gemini-artifacts/stdout.log ]; then
+              cat gemini-artifacts/stdout.log
+            else
+              echo "stdout.log not found"
+            fi
+          else
+            echo "Artifacts directory not found"
+          fi
 
       - name: 🏁 Mission Accomplished
         run: echo "🍂 Collection finished for ${{ env.AGENT }}."
