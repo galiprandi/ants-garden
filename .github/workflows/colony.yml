@@ -6,9 +6,14 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: 'Ant ID (e.g., carol, uma)'
+        description: 'Ant name (e.g., carol, uma)'
         required: true
         type: string
+      model:
+        description: 'Gemini model to use'
+        required: false
+        type: string
+        default: 'gemma-4-26b-a4b-it'
 
 jobs:
   working:
@@ -88,17 +93,18 @@ jobs:
           echo "🧠 $FILE_NAME memory and instincts loaded into ganglia."
 
       - name: 🐜 Awakening the Drone
-        uses: 'google-github-actions/run-gemini-cli@v0'
+        uses: 'google-github-actions/run-gemini-cli@v0.1.22'
         env:
           GEMINI_CLI_TRUST_WORKSPACE: true
         with:
           gemini_api_key: ${{ secrets.ANTS_AI_KEY }}
-          gemini_model: 'gemma-4-26b-a4b-it'
+          gemini_model: ${{ github.event.inputs.model || 'gemma-4-26b-a4b-it' }}
           prompt: ${{ steps.ant-brain.outputs.prompt }}
           settings: |-
               {
                 "model": {
-                  "maxSessionTurns": 25
+                  "maxSessionTurns": 75,
+                  "temperature": 0.7
                 },
                 "telemetry": {
                   "enabled": true,
@@ -126,6 +132,14 @@ jobs:
                       "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
                     }
                   },
+                  "filesystem": {
+                    "command": "npx",
+                    "args": [
+                      "-y",
+                      "@modelcontextprotocol/server-filesystem",
+                      "/workspace"
+                    ]
+                  },
                   "shell": {
                     "command": "npx",
                     "args": [
@@ -142,7 +156,7 @@ jobs:
                   }
                 },
                 "tools": {
-                  "core": []
+                  "core": ["all"]
                 }
               }
           extensions: |
