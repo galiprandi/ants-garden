@@ -103,6 +103,7 @@ jobs:
           GEMINI_CLI_TRUST_WORKSPACE: true
         with:
           gemini_api_key: ${{ secrets.ANTS_AI_KEY }}
+          gemini_model: ${{ env.ANTS_AI_MODEL }}
           prompt: ${{ steps.ant-brain.outputs.prompt }}
 
       # - name: 🐜 Awakening Ant
