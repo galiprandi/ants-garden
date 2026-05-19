@@ -1,0 +1,91 @@
+name: 🐜 Ants Colony
+
+on:
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'ID de la Hormiga (ej. carol, uma)'
+        required: true
+        type: string
+
+jobs:
+  working:
+    name: 🐜 Ant Mission
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pull-requests: write
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ANTS_AI_KEY: ${{ secrets.ANTS_AI_KEY }}
+    
+    steps:
+      - name: 🕳️ Descending into the Anthill
+        uses: actions/checkout@v6
+
+      - name: 🆔 Pheromone Identification
+        id: identify
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            AGENT_NAME="${{ github.event.inputs.name }}"
+            echo "AGENTE=$AGENT_NAME" >> $GITHUB_ENV
+            echo "📢 Llamado directo para la hormiga: $AGENT_NAME"
+          else
+            AUTHOR_NAME=$(gh pr view ${{ github.event.pull_request.number }} --json commits --jq '.commits[-1].commit.author.name')
+            if [[ "$AUTHOR_NAME" =~ 🐜\ (.+) ]]; then
+              echo "AGENTE=${BASH_REMATCH[1]}" >> $GITHUB_ENV
+              echo "🧬 ADN detectado: Hormiga ${BASH_REMATCH[1]}"
+            else
+              echo "❌ Intruso detectado: El formato del autor debe ser '🐜 [NAME]'"
+              exit 1
+            fi
+          fi
+
+      - name: 🛡️ Territory Inspection (PR Limit)
+        run: |
+          ANT="${{ env.AGENTE }}"
+          OPEN_PRS=$(gh pr list --state open --repo ${{ github.repository }} --search "author:🐜 $ANT" --json number --jq '. | length')
+          if [ "$OPEN_PRS" -ge 2 ]; then
+            echo "🚨 Saturación de túneles: $ANT ya tiene $OPEN_PRS misiones activas. Límite alcanzado."
+            exit 1
+          fi
+          echo "✅ Terreno despejado para la hormiga $ANT"
+
+      - name: ⚒️ Equipping the Mandibles
+        run: |
+          git config --global user.name "🐜 ${{ env.AGENTE }}"
+          git config --global user.email "${{ env.AGENTE }}@ants.io"
+          echo "🛠️ Herramientas listas para la recolección."
+
+      - name: 🧠 Synaptic Link (Loading Brain)
+        id: ant-brain
+        run: |
+          BRAIN_FILE=".ants/gallery/$(echo '${{ env.AGENTE }}' | tr '[:upper:]' '[:lower:]').md"
+          if [ ! -f "$BRAIN_FILE" ]; then 
+            echo "❌ Error: La memoria $BRAIN_FILE no está en la galería."
+            exit 1 
+          fi
+          
+          DELIMITER="BRAIN_CONTENT_DELIMITER_$(date +%s)"
+          {
+            echo "prompt<<$DELIMITER"
+            cat "$BRAIN_FILE"
+            echo "$DELIMITER"
+          } >> $GITHUB_OUTPUT
+          echo "🧠 Memoria cargada en los ganglios de la hormiga."
+
+      - name: 🐜 Awakening the Drone
+        uses: 'google-github-actions/run-gemini-cli@v0'
+        env:
+          GEMINI_CLI_TRUST_WORKSPACE: true
+        with:
+          gemini_api_key: ${{ secrets.ANTS_AI_KEY }}
+          gemini_model: 'gemini-1.5-flash'
+          prompt: ${{ steps.ant-brain.outputs.prompt }}
+
+      - name: 🏁 Mission Accomplished
+        run: |
+          echo "🍂 Recolección finalizada. Regresando a la cámara real."
