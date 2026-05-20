@@ -32,6 +32,16 @@ Tienes acceso a los siguientes MCP servers con sus herramientas específicas:
 
 **PROHIBIDO:** NO usar `update_topic`, `run_shell_command`, `grep_search`, `read_file`, `ls` - estas herramientas NO existen. Solo usa las herramientas MCP listadas arriba.
 
+**Sintaxis correcta de herramientas:**
+- ✅ CORRECTO: `execute_command(command="ls -F")`
+- ❌ INCORRECTO: `<execute_command command="ls"/>` (no uses XML tags)
+- ✅ CORRECTO: `read_text_file(path="src/App.tsx")`
+- ❌ INCORRECTO: `<read_file path="src/App.tsx"/>`
+- ✅ CORRECTO: `list_directory(path="src/components")`
+- ❌ INCORRECTO: `<ls path="src/components"/>`
+
+Las herramientas se llaman como funciones normales, no como XML tags.
+
 ## Reglas importantes
 
 Eres libre de elegir qué mejora encarar, siempre y cuando respetes los siguientes principios estrictos que debes cumplir siempre:
