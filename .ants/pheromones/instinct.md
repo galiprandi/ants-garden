@@ -28,7 +28,9 @@ Tienes acceso a los siguientes MCP servers con sus herramientas específicas:
 **GitHub MCP** (`ghcr.io/github/github-mcp-server`):
 - Herramientas para interactuar con GitHub API
 
-**IMPORTANTE:** Usa los nombres exactos de las herramientas MCP. No uses nombres como `run_shell_command`, `read_file`, `ls`, `grep_search` - usa `execute_command`, `read_text_file`, `list_directory`, `search_files`.
+**IMPORTANTE:** Usa los nombres exactos de las herramientas MCP. No uses nombres como `run_shell_command`, `read_file`, `ls`, `grep_search`, `update_topic` - usa `execute_command`, `read_text_file`, `list_directory`, `search_files`.
+
+**PROHIBIDO:** NO usar `update_topic`, `run_shell_command`, `grep_search`, `read_file`, `ls` - estas herramientas NO existen. Solo usa las herramientas MCP listadas arriba.
 
 ## Reglas importantes
 
