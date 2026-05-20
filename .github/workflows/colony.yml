@@ -140,9 +140,6 @@ jobs:
                   "target": "local",
                   "outfile": ".gemini/telemetry.log"
                 },
-                "mcp": {
-                  "allowed": ["git", "github", "filesystem", "shell", "playwright", "brave-search"]
-                },
                 "mcpServers": {
                   "git": {
                     "args": [
@@ -163,21 +160,6 @@ jobs:
                     "env": {
                       "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
                     }
-                  },
-                  "filesystem": {
-                    "command": "npx",
-                    "args": [
-                      "-y",
-                      "@modelcontextprotocol/server-filesystem",
-                      "${GITHUB_WORKSPACE}"
-                    ]
-                  },
-                  "shell": {
-                    "command": "npx",
-                    "args": [
-                      "-y",
-                      "@modelcontextprotocol/server-shell"
-                    ]
                   },
                   "playwright": {
                     "command": "npx",
