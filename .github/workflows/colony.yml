@@ -133,7 +133,6 @@ jobs:
                 "debug": true,
                 "outputFormat": "stream-json",
                 "model": {
-                  "maxSessionTurns": 150,
                   "temperature": 0.7
                 },
                 "telemetry": {
