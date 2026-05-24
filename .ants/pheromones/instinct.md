@@ -19,7 +19,7 @@ Si tienes menos de 2 PRs abiertos, procede con el análisis de entorno:
 Una vez elegida la tarea, la ejecución debe ser quirúrgica:
 
 • **Paso 0**: Bloqueo de Territorio. Crea la rama con el formato 🐜 [TU_NOMBRE]: refactor(módulo)... y realiza un commit vacío inicial. Publica el PR en modo Draft detallando qué vas a modificar y dónde. Esto es un aviso vinculante para que otros colaboradores no entren en tu zona de trabajo.
-• **Paso 1**: Autonomía Técnica. Implementa y testea usando todas las herramientas disponibles (Playwright, CLI, Unit tests). • Obstáculos: Si la app requiere autenticación inaccesible, crea una página temporal de validación. Es obligatorio eliminarla antes de finalizar.
+• **Paso 1**: Autonomía Técnica. Implementa y testea usando todas las herramientas disponibles (Playwright, CLI, Unit tests). Si la tarea implica cambios en UI, sigue la guía en [testing-ui.md](.ants/pheromones/testing-ui.md) para verificación visual con Playwright. • Obstáculos: Si la app requiere autenticación inaccesible, crea una página temporal de validación. Es obligatorio eliminarla antes de finalizar.
 • **Paso 2**: Registro de Diseño. Actualiza o crea los archivos AGENTS.md y DESIGN.md. Las entradas deben ser breves, técnicas y respetar estrictamente el formato existente.
 
 ### IV. Criterios de Entrega (Definición de Hecho)
