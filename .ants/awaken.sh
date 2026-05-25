@@ -19,7 +19,7 @@ export GOOGLE_GENERATIVE_AI_API_KEY="$ANTS_API_KEY"
 echo "📥 Cloning repository..."
 git clone --branch "$BRANCH" "$REPOSITORY" /workspace/repo
 cd /workspace/repo
-# cp .ants/opencode.json .
+[ -f .ants/opencode.json ] && cp .ants/opencode.json .
 
 
 # Ejecutar OpenCode con el prompt
