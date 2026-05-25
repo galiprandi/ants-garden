@@ -32,15 +32,6 @@ else
     exit 1
 fi
 
-# Validar variables requeridas
-REQUIRED_VARS=("GITHUB_TOKEN" "REPOSITORY" "ANTS_API_KEY" "ANTS_MODEL")
-for var in "${REQUIRED_VARS[@]}"; do
-    if [ -z "${!var}" ]; then
-        echo "❌ Error: Required environment variable $var is not set in .env"
-        exit 1
-    fi
-done
-
 # Imagen base compartida
 IMAGE_NAME="ants-base"
 
@@ -59,7 +50,7 @@ echo "   Repo: $REPOSITORY"
 # Nombre único de la hormiga
 ANT_ID="ants-$ANT_NAME-$(date +%s)"
 
-docker run -d --name "$ANT_ID" -e ANT="$ANT_NAME" -e PROMPT="$PROMPT" -e GITHUB_TOKEN="$GITHUB_TOKEN" -e REPOSITORY="$REPOSITORY" -e BRANCH="${BRANCH:-main}" -e GOOGLE_GENERATIVE_AI_API_KEY="$ANTS_API_KEY" -e MODEL="$ANTS_MODEL" -e EMAIL="${EMAIL:-$ANT_NAME@ants.io}" -v ~/.ssh:/root/.ssh:ro -v ~/.ssh/known_hosts:/root/.ssh/known_hosts:ro "$IMAGE_NAME"
+docker run -d --name "$ANT_ID" --env-file "$ANTS_DIR/../.env" -e ANT="$ANT_NAME" -e PROMPT="$PROMPT" -e BRANCH="${BRANCH:-main}" -e EMAIL="${EMAIL:-$ANT_NAME@ants.io}" -v ~/.ssh:/root/.ssh:ro -v ~/.ssh/known_hosts:/root/.ssh/known_hosts:ro "$IMAGE_NAME"
 
 echo "🐜 Ant started: $ANT_ID"
 echo "📋 View logs: docker logs -f $ANT_ID"

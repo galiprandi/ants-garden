@@ -18,12 +18,10 @@ export GH_TOKEN="$GITHUB_TOKEN"
 echo "📥 Cloning repository..."
 git clone --branch "$BRANCH" "$REPOSITORY" /workspace/repo
 cd /workspace/repo
-[ -f .ants/opencode.json ] && cp .ants/opencode.json .
-
 
 # Ejecutar OpenCode con el prompt
 echo "🧠 Running OpenCode..."
-# opencode run "$PROMPT" || echo "❌ OpenCode failed, keeping container alive for debugging"
+opencode --model "$MODEL" run "$PROMPT" || echo "❌ OpenCode failed, keeping container alive for debugging"
 
 echo "✅ Ant $ANT finished work"
 # Keep container alive for debugging
