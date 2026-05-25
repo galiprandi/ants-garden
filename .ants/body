@@ -20,6 +20,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY .ants/awaken.sh /usr/local/bin/awaken.sh
+COPY awaken.sh /usr/local/bin/awaken.sh
 RUN chmod +x /usr/local/bin/awaken.sh
 ENTRYPOINT ["awaken.sh"]
