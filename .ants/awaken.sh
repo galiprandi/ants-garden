@@ -14,15 +14,17 @@ git config --global user.email "$EMAIL"
 
 # Configurar gh cli con el token
 export GH_TOKEN="$GITHUB_TOKEN"
-
+export GOOGLE_GENERATIVE_AI_API_KEY="$ANTS_API_KEY"
 # Clonar repositorio
 echo "📥 Cloning repository..."
 git clone --branch "$BRANCH" "$REPOSITORY" /workspace/repo
 cd /workspace/repo
+# cp .ants/opencode.json .
+
 
 # Ejecutar OpenCode con el prompt
 echo "🧠 Running OpenCode..."
-opencode run "$PROMPT" || echo "❌ OpenCode failed, keeping container alive for debugging"
+# opencode run "$PROMPT" || echo "❌ OpenCode failed, keeping container alive for debugging"
 
 echo "✅ Ant $ANT finished work"
 # Keep container alive for debugging
