@@ -14,7 +14,6 @@ git config --global user.email "$EMAIL"
 
 # Configurar gh cli con el token
 export GH_TOKEN="$GITHUB_TOKEN"
-export GOOGLE_GENERATIVE_AI_API_KEY="$ANTS_API_KEY"
 # Clonar repositorio
 echo "📥 Cloning repository..."
 git clone --branch "$BRANCH" "$REPOSITORY" /workspace/repo
