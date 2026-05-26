@@ -101,9 +101,38 @@ Analiza y reflexiona sobre lo que ves en la imagen. ¿La funcionalidad se ve exa
 
 Si no se ve correcto, actualiza el plan y vuelve a verificar.
 
-### 5. Confirma la Finalización ✅
+### 5. Adjunta Screenshots al PR como Comentario 📎
 
-Una vez que hayas confirmado visualmente que la captura de pantalla se ve perfecta y el video fue grabado, utiliza el comando de finalización de verificación:
+Una vez que hayas confirmado visualmente que la captura de pantalla se ve perfecta, DEBES adjuntarla al PR como comentario para evidencia visual:
+
+1. **Guarda el screenshot en el repositorio** (ej: `public/screenshots/` o `screenshots/`)
+2. **Commit y push el screenshot** al PR
+3. **Adjunta el screenshot como comentario** usando `gh api`:
+
+```bash
+# Obtener el número del PR actual
+PR_NUMBER=$(gh pr view --json number --jq '.number')
+
+# Adjuntar el screenshot como comentario con descripción
+gh api repos/galiprandi/ants-garden/issues/$PR_NUMBER/comments \
+  -f body='### Validación visual: [DESCRIPCIÓN DEL CAMBIO]\n\n\n![screenshot](https://raw.githubusercontent.com/galiprandi/ants-garden/$(git branch --show-current)/public/screenshots/nombre.png)'
+```
+
+**Ejemplo concreto:**
+```bash
+gh api repos/galiprandi/ants-garden/issues/6/comments \
+  -f body='### Validación visual: Nuevo componente de input de número para Sudoku\n\n\n![screenshot](https://raw.githubusercontent.com/galiprandi/ants-garden/uma-refactor-sudoku-implement-core-gameplay/public/screenshots/number-pad.png)'
+```
+
+**⚠️ IMPORTANTE:**
+- Usa comillas simples (`'`) en el body para evitar que zsh interprete los corchetes `[]`
+- La descripción debe explicar QUÉ cambió y PARA QUÉ
+- La URL debe apuntar a la rama actual del PR
+- Reemplaza `PR_NUMBER` con el número real del PR
+
+### 6. Confirma la Finalización ✅
+
+Una vez que hayas confirmado visualmente que la captura de pantalla se ve perfecta, el video fue grabado y adjuntado al PR, utiliza el comando de finalización de verificación:
 
 Pasa la ruta de la captura de pantalla como primer argumento, y pasa todas las rutas de video finales en la lista de archivos multimedia adicionales.
 
