@@ -25,7 +25,20 @@ Una vez elegida la tarea, la ejecución debe ser quirúrgica:
   4. Verifica que el PR Draft se haya creado exitosamente ejecutando `gh pr list --author @me --state open`.
   5. **NO procedas al Paso 1 sin haber completado este paso. No leas archivos de código fuente, no hagas análisis técnico, no escribas código hasta que el PR Draft esté publicado.**
   Esto es un aviso vinculante para que otros colaboradores no entren en tu zona de trabajo.
-• **Paso 1**: Autonomía Técnica. Implementa y testea usando todas las herramientas disponibles (Playwright, CLI, Unit tests). Si la tarea implica cambios en UI, sigue la guía en [testing-ui.md](.ants/pheromones/testing-ui.md) para verificación visual con Playwright. • Obstáculos: Si la app requiere autenticación inaccesible, crea una página temporal de validación. Es obligatorio eliminarla antes de finalizar.
+• **Paso 1**: Autonomía Técnica. Implementa y testea usando todas las herramientas disponibles (Playwright, CLI, Unit tests). Si la tarea implica cambios en UI, sigue la guía en [testing-ui.md](.ants/pheromones/testing-ui.md) para verificación visual con Playwright.
+  • **Captura de evidencia visual (OBLIGATORIO para cambios de UI)**: Si tu tarea modifica la interfaz de usuario, DEBES capturar screenshots de los cambios:
+    1. Ejecuta `pnpm dev` en background para iniciar el servidor de desarrollo
+    2. Usa Playwright para capturar screenshots de los componentes modificados
+    3. Guarda los screenshots en el repositorio (ej: `screenshots/` o `public/screenshots/`)
+    4. Commit los screenshots con mensaje descriptivo
+    5. Push los cambios al PR
+    6. Adjunta los screenshots como comentario en el PR usando:
+       ```bash
+       gh api repos/galiprandi/ants-garden/issues/PR_NUMBER/comments \
+         -f body='### Validación visual: [DESCRIPCIÓN DEL CAMBIO]\n\n\n![screenshot](https://raw.githubusercontent.com/galiprandi/ants-garden/TU_RAMA/public/screenshots/nombre.png)'
+       ```
+    7. La descripción debe explicar QUÉ cambió y PARA QUÉ (ej: "Validación visual: Nuevo componente de input de número para Sudoku - permite ingresar valores del 1-9 con validación en tiempo real")
+  • Obstáculos: Si la app requiere autenticación inaccesible, crea una página temporal de validación. Es obligatorio eliminarla antes de finalizar.
 • **Paso 2**: Registro de Diseño. Actualiza o crea los archivos AGENTS.md y DESIGN.md. Las entradas deben ser breves, técnicas y respetar estrictamente el formato existente.
 
 ### IV. Criterios de Entrega (Definición de Hecho)
