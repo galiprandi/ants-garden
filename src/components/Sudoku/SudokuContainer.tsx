@@ -114,36 +114,32 @@ const SudokuContainer: React.FC = () => {
     return true;
   };
 
-  // Check if the Sudoku puzzle is solved correctly
-  const checkWinCondition = (board: SudokuBoard): boolean => {
-    // First check if all cells are filled
-    for (let row = 0; row < 9; row++) {
-      for (let col = 0; col < 9; col++) {
-        if (board[row][col].value === null) {
-          return false; // Empty cell found
-        }
-      }
-    }
-    
-    // Then check if all placements are valid according to Sudoku rules
-    for (let row = 0; row < 9; row++) {
-      for (let col = 0; col < 9; col++) {
-        const value = board[row][col].value;
-        if (value !== null) {
-          // Temporarily set this cell to 0 to check if the placement is valid
-          board[row][col].value = null;
-          const isValid = validateMove(board, row, col, value!);
-          board[row][col].value = value; // Restore the value
-          
-          if (!isValid) {
-            return false; // Invalid placement found
-          }
-        }
-      }
-    }
-    
-    return true; // All cells filled and all placements valid
-  };
+   // Check if the Sudoku puzzle is solved correctly
+   const checkWinCondition = (board: SudokuBoard): boolean => {
+     // First check if all cells are filled
+     for (let row = 0; row < 9; row++) {
+       for (let col = 0; col < 9; col++) {
+         if (board[row][col].value === null) {
+           return false; // Empty cell found
+         }
+       }
+     }
+     
+     // Then check if all placements are valid according to Sudoku rules
+     for (let row = 0; row < 9; row++) {
+       for (let col = 0; col < 9; col++) {
+         const value = board[row][col].value;
+         if (value !== null) {
+           // Check if this placement is valid (no need to mutate board)
+           if (!validateMove(board, row, col, value)) {
+             return false; // Invalid placement found
+           }
+         }
+       }
+     }
+     
+     return true; // All cells filled and all placements valid
+   };
 
   // Handle keyboard input
   useEffect(() => {
