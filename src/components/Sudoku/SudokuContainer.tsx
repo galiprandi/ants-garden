@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import SudokuGrid from './SudokuGrid';
 import { SudokuBoard } from './types';
-
-const MOCK_BOARD: SudokuBoard = Array(9).fill(null).map((_, rowIndex) =>
-  Array(9).fill(null).map((_, colIndex) => ({
-    value: (rowIndex === colIndex || rowIndex + colIndex === 8) ? (rowIndex + colIndex + 1) % 9 || 9 : null,
-    isFixed: (rowIndex === colIndex || rowIndex + colIndex === 8),
-    isError: false,
-    isHighlighted: false,
-    notes: [],
-  }))
-);
+import { generateSudoku, convertToSudokuBoard } from '../../utils/sudokuGenerator';
 
 const SudokuContainer: React.FC = () => {
-  const [board, setBoard] = useState<SudokuBoard>(MOCK_BOARD);
+  const [board, setBoard] = useState<SudokuBoard>(() => {
+    const puzzle = generateSudoku('medium');
+    return convertToSudokuBoard(puzzle.puzzle);
+  });
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [gameStatus, setGameStatus] = useState<'playing' | 'won'>('playing');
+  
+  const startNewGame = () => {
+    const puzzle = generateSudoku('medium');
+    setBoard(convertToSudokuBoard(puzzle.puzzle));
+    setSelectedCell(null);
+    setGameStatus('playing');
+  };
 
   const handleCellClick = (row: number, col: number) => {
     // Don't allow selecting fixed cells
@@ -166,18 +167,26 @@ const SudokuContainer: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center gap-8 p-4 min-h-screen" tabIndex={0} onKeyDown={() => {}}>
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-emerald-900">Sudoku Challenge</h2>
-        <p className="text-emerald-700/60">Test your logic, ant!</p>
-        
-        {/* Win message */}
-        {gameStatus === 'won' && (
-          <div className="mt-4 p-4 bg-emerald-50/90 rounded-xl border border-emerald-200/50">
-            <h3 className="text-2xl font-bold text-emerald-900 mb-2">¡Felicidades!</h3>
-            <p className="text-emerald-700">Has resuelto el Sudoku correctamente.</p>
-          </div>
-        )}
-      </div>
+       <div className="text-center">
+         <h2 className="text-3xl font-bold text-emerald-900">Sudoku Challenge</h2>
+         <p className="text-emerald-700/60">Test your logic, ant!</p>
+         
+         {/* New Game button - always visible */}
+         <button 
+           onClick={startNewGame}
+           className="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors duration-200 shadow-md font-medium"
+         >
+           New Game
+         </button>
+         
+         {/* Win message */}
+         {gameStatus === 'won' && (
+           <div className="mt-4 p-4 bg-emerald-50/90 rounded-xl border border-emerald-200/50">
+             <h3 className="text-2xl font-bold text-emerald-900 mb-2">¡Felicidades!</h3>
+             <p className="text-emerald-700">Has resuelto el Sudoku correctamente.</p>
+           </div>
+         )}
+       </div>
       
       <SudokuGrid 
         board={board} 
