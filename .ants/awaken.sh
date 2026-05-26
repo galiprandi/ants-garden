@@ -27,6 +27,7 @@ echo "   🧠 Total brain: $((BRAIN_SIZE + INSTINCT_SIZE)) bytes"
 
 # Starting work
 echo "🔨 Beginning work..."
-opencode --model "$ANTS_MODEL" run $(cat ".ants/gallery/$ANT.md")$(cat ".ants/pheromones/instinct.md") || echo "❌ Work failed, keeping ant alive for debugging"
+PROMPT=$(cat ".ants/gallery/$ANT.md")$'\n\n'$(cat ".ants/pheromones/instinct.md")
+opencode --model "$ANTS_MODEL" run "$PROMPT" || echo "❌ Work failed, keeping ant alive for debugging"
 
 echo "✅ Ant $ANT completed mission"
