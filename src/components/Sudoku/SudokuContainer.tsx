@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import SudokuGrid from './SudokuGrid';
 import { SudokuBoard } from './types';
-
-const MOCK_BOARD: SudokuBoard = Array(9).fill(null).map((_, rowIndex) =>
-  Array(9).fill(null).map((_, colIndex) => ({
-    value: (rowIndex === colIndex || rowIndex + colIndex === 8) ? (rowIndex + colIndex + 1) % 9 || 9 : null,
-    isFixed: (rowIndex === colIndex || rowIndex + colIndex === 8),
-    isError: false,
-    isHighlighted: false,
-    notes: [],
-  }))
-);
+import { generateSudoku, convertToSudokuBoard } from '../../utils/sudokuGenerator';
 
 const SudokuContainer: React.FC = () => {
-  const [board, setBoard] = useState<SudokuBoard>(MOCK_BOARD);
+  const [board, setBoard] = useState<SudokuBoard>(() => {
+    const puzzle = generateSudoku('medium');
+    return convertToSudokuBoard(puzzle.puzzle);
+  });
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [gameStatus, setGameStatus] = useState<'playing' | 'won'>('playing');
   const [noteTakingEnabled, setNoteTakingEnabled] = useState<boolean>(false);

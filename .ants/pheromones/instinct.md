@@ -25,7 +25,7 @@ Si tienes menos de 2 PRs abiertos, procede con el análisis de entorno:
 Una vez elegida la tarea, la ejecución debe ser quirúrgica:
 
 • **Paso 0 (OBLIGATORIO - BLOQUEANTE)**: Bloqueo de Territorio. ANTES de editar CUALQUIER archivo de código:
-  1. Crea la rama con el formato `[TU_NOMBRE]-refactor(modulo)-descripcion` (SIN emojis ni caracteres especiales que causen errores en git).
+  1. Crea la rama con el formato `[TU_NOMBRE]-refactor-modulo-descripcion` (SIN paréntesis, SIN emojis, SIN caracteres especiales como `()[]{}&|;<>`). Solo usa letras, números, guiones medios y guiones bajos.
   2. Realiza un commit vacío inicial.
   3. Ejecuta inmediatamente `gh pr create --draft --label "ant-[TU_NOMBRE]"` con un título descriptivo y un body que detalle qué vas a modificar y dónde.
   4. Verifica que el PR Draft se haya creado exitosamente ejecutando `gh pr list --label "ant-[TU_NOMBRE]" --state open`.
@@ -33,7 +33,7 @@ Una vez elegida la tarea, la ejecución debe ser quirúrgica:
   Esto es un aviso vinculante para que otros colaboradores no entren en tu zona de trabajo.
 • **Paso 1**: Autonomía Técnica. Implementa y testea usando todas las herramientas disponibles (Playwright, CLI, Unit tests). Si la tarea implica cambios en UI, sigue la guía en [testing-ui.md](.ants/pheromones/testing-ui.md) para verificación visual con Playwright.
   • **Captura de evidencia visual (OBLIGATORIO para cambios de UI)**: Si tu tarea modifica la interfaz de usuario, DEBES capturar screenshots de los cambios:
-    1. Ejecuta `pnpm dev` en background para iniciar el servidor de desarrollo
+    1. Ejecuta `nohup pnpm dev > /tmp/vite.log 2>&1 &` para iniciar el servidor de desarrollo en background
     2. Usa Playwright para capturar screenshots de los componentes modificados
     3. Guarda los screenshots en el repositorio (ej: `screenshots/` o `public/screenshots/`)
     4. Commit los screenshots con mensaje descriptivo
