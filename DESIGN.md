@@ -43,3 +43,13 @@ The Ants Garden design system is inspired by nature and the organic feel of an a
 - **Error State**: Invalid entries show rose-50/80 background with rose-600 text
 - **Win State**: Correct completion shows celebratory message with emerald 50/90 background
 - **Number Pad**: On-screen input uses emerald 50/80 background with hover states
+- **Note-taking Mode**:
+  - Toggle button: Shows ✏️ when active, 🔢 when inactive
+  - Inactive state: Subtle emerald 50/80 background with hover effect
+  - Active state: Prominent emerald 200/90 background with shadow
+  - Number pad in note-taking mode: Softer emerald 50/60 background for active notes
+  - Cell styling in note-taking mode: 
+    - Cells with notes: Light emerald 50/60 background
+    - Empty cells: Very light emerald 50/30 background
+    - Hover states: Enhanced feedback with emerald 100/50 background
+  - Visual feedback: Notes appear with smooth transitions and hover effects

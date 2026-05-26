@@ -5,9 +5,10 @@ interface SudokuGridProps {
   board: SudokuBoard;
   onCellClick: (row: number, col: number) => void;
   selectedCell: { row: number; col: number } | null;
+  noteTakingEnabled?: boolean;
 }
 
-const SudokuGrid: React.FC<SudokuGridProps> = ({ board, onCellClick, selectedCell }) => {
+const SudokuGrid: React.FC<SudokuGridProps> = ({ board, onCellClick, selectedCell, noteTakingEnabled = false }) => {
   // Get currently selected cell's value for matching highlights
   const selectedValue = selectedCell ? board[selectedCell.row][selectedCell.col].value : null;
 
@@ -20,7 +21,7 @@ const SudokuGrid: React.FC<SudokuGridProps> = ({ board, onCellClick, selectedCel
           return (
             <div
               key={num}
-              className="flex items-center justify-center text-[9px] md:text-[10px] font-semibold text-emerald-700/60 leading-none"
+              className="flex items-center justify-center text-[9px] md:text-[10px] font-semibold text-emerald-600/70 leading-none transition-opacity duration-200 hover:text-emerald-800/90"
             >
               {hasNote ? num : ''}
             </div>
@@ -69,7 +70,16 @@ const SudokuGrid: React.FC<SudokuGridProps> = ({ board, onCellClick, selectedCel
     } else if (cell.isFixed) {
       textClass = isSelected ? 'text-emerald-950 font-extrabold' : 'text-slate-800 font-extrabold';
     } else {
-      textClass = cell.isError ? 'text-rose-600' : 'text-emerald-600 font-medium';
+      // Special styling for note-taking mode
+      if (noteTakingEnabled && cell.value === null && cell.notes.length > 0) {
+        bgClass = 'bg-emerald-50/60';
+        textClass = 'text-emerald-600/80';
+      } else if (noteTakingEnabled && cell.value === null) {
+        bgClass = 'bg-emerald-50/30';
+        textClass = 'text-emerald-400/50';
+      } else {
+        textClass = cell.isError ? 'text-rose-600' : 'text-emerald-600 font-medium';
+      }
     }
 
     return (
@@ -80,6 +90,7 @@ const SudokuGrid: React.FC<SudokuGridProps> = ({ board, onCellClick, selectedCel
           relative flex items-center justify-center aspect-square text-base sm:text-lg md:text-xl font-sans cursor-pointer select-none transition-all duration-200
           ${borderRight} ${borderBottom} ${bgClass} ${textClass}
           hover:bg-emerald-50/80 hover:scale-[1.01] hover:shadow-sm
+          ${noteTakingEnabled && cell.value === null && 'hover:bg-emerald-100/50'}
         `}
       >
         {cell.value !== null ? (
