@@ -31,15 +31,18 @@ Si tienes menos de 2 PRs propios abiertos, procede con el análisis de entorno:
 Una vez elegida la tarea, la ejecución debe ser quirúrgica:
 
 • **Paso 0 (OBLIGATORIO - BLOQUEANTE)**: Bloqueo de Territorio. ANTES de editar CUALQUIER archivo de código:
-  1. Crea la rama con el formato `[TU_NOMBRE]-refactor-modulo-descripcion`. 
+  1. Crea la rama con el formato `[TU_NOMBRE]-refactor-modulo-descripcion`.
      - **PROHIBIDO**: paréntesis `()`, corchetes `[]`, llaves `{}`, emojis, caracteres especiales como `&|;<>`
      - **PERMITIDO**: letras, números, guiones medios `-`, guiones bajos `_`
      - **EJEMPLO CORRECTO**: `carol-refactor-auth-login-validation`
      - **EJEMPLO INCORRECTO**: `carol-refactor(auth)-login-validation` ❌
   2. Realiza un commit vacío inicial.
-  3. Ejecuta inmediatamente `gh pr create --draft --label "ant-[TU_NOMBRE]"` con un título descriptivo y un body que detalle qué vas a modificar y dónde.
-  4. Verifica que el PR Draft se haya creado exitosamente ejecutando `gh pr list --label "ant-[TU_NOMBRE]" --state open`.
-  5. **NO procedas al Paso 1 sin haber completado este paso. No leas archivos de código fuente, no hagas análisis técnico, no escribas código hasta que el PR Draft esté publicado.**
+  3. **PUSH LA RAMA INMEDIATAMENTE**: `git push -u origin [NOMBRE_RAMA]`
+  4. **Verifica que el label exista**: `gh label list | grep "ant-[TU_NOMBRE]" || gh label create "ant-[TU_NOMBRE]" --color "#00ff00" --description "Pull requests created by ant [TU_NOMBRE]"`
+  5. **Valida el código antes de crear el PR**: Si el proyecto tiene linting (ej: `npm run lint`, `pnpm lint`), ejecútalo y corrige todos los errores/warnings antes de continuar.
+  6. Ejecuta `gh pr create --draft --label "ant-[TU_NOMBRE]"` con un título descriptivo y un body que detalle qué vas a modificar y dónde.
+  7. Verifica que el PR Draft se haya creado exitosamente ejecutando `gh pr list --label "ant-[TU_NOMBRE]" --state open`.
+  8. **NO procedas al Paso 1 sin haber completado este paso. No leas archivos de código fuente, no hagas análisis técnico, no escribas código hasta que el PR Draft esté publicado.**
   Esto es un aviso vinculante para que otros colaboradores no entren en tu zona de trabajo.
 • **Paso 1**: Autonomía Técnica. Implementa y testea usando todas las herramientas disponibles (Playwright, CLI, Unit tests). Si la tarea implica cambios en UI, sigue la guía en [testing-ui.md](.ants/pheromones/testing-ui.md) para verificación visual con Playwright.
   • **Captura de evidencia visual (OBLIGATORIO para cambios de UI)**: Si tu tarea modifica la interfaz de usuario, DEBES capturar screenshots de los cambios:
