@@ -24,6 +24,7 @@ Si tienes menos de 2 PRs propios abiertos, procede con el análisis de entorno:
    - Aprende de los enfoques técnicos de otras hormigas
 
 3. Mapeo de Colisiones: Examina todos los PRs del repositorio (activos y Drafts). Identifica qué archivos están bajo modificación por otros colaboradores. No interferirás ni tocarás archivos que estén en conflicto potencial con el trabajo ajeno.
+   - **Si ya tienes un PR draft propio vacío** (solo commit inicial sin cambios): ciérralo con `gh pr close [PR_NUMBER]` y procede a crear uno nuevo siguiendo el Paso 0.
 
 4. Elección de Tarea: Define tu objetivo basándote en el código actual, specs y documentación. Tu "intuición" debe priorizar la dirección técnica que el repositorio ha tomado en sus últimos cambios.
 
