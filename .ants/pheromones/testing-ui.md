@@ -35,7 +35,7 @@ Si un flujo completo toma muchos pasos, está bien — los videos más largos y 
 Primero, crea directorios temporales para tu trabajo:
 
 ```bash
-mkdir -p /test/verification/videos /test/verification/screenshots
+mkdir -p screenshots videos
 ```
 
 ⚠️ **CRÍTICO:** DEBES usar `browser.new_context(record_video_dir=...)` — NO `browser.new_page()` — para grabar video. El video es una característica a nivel de contexto. DEBES llamar a `context.close()` antes de `browser.close()` o el archivo de video NO se guardará.
@@ -60,14 +60,14 @@ def run_cuj(page):
     #   page.wait_for_timeout(500)
 
     # Toma una captura de pantalla en el momento clave
-    page.screenshot(path="/test/verification/screenshots/verification.png")
+    page.screenshot(path="screenshots/verification.png")
     page.wait_for_timeout(1000)  # Mantén el estado final para el video
 
 if __name__ == "__main__":
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         context = browser.new_context(
-            record_video_dir="/test/verification/videos"
+            record_video_dir="videos"
         )
         page = context.new_page()
         try:
@@ -83,9 +83,9 @@ if __name__ == "__main__":
 - Agrega una pausa de 1 segundo (`page.wait_for_timeout(1000)`) en el estado final para mostrar claramente el resultado final.
 - Apunta a una duración total del video de 10 a 15 segundos, pero más tiempo está bien si el CUJ lo requiere — la integridad es más importante que la brevedad.
 
-Guarda el script con un nombre como `/test/verification/verify_<nombre_cuj>.py`.
+Guarda el script con un nombre como `verify_<nombre_cuj>.py`.
 
-Puedes ejecutar tu script con: `python /test/verification/verify_<nombre_cuj>.py`.
+Puedes ejecutar tu script con: `python verify_<nombre_cuj>.py`.
 
 El script debe ejecutarse con éxito, de lo contrario, depúralo.
 
@@ -93,7 +93,7 @@ El script debe ejecutarse con éxito, de lo contrario, depúralo.
 
 Utiliza mis herramientas de visualización para cargar la captura de pantalla que acabas de crear.
 
-También puedes revisar el video grabado desde `/test/verification/videos/` para inspeccionar la grabación de la sesión.
+También puedes revisar el video grabado desde `videos/` para inspeccionar la grabación de la sesión.
 
 Analiza y reflexiona sobre lo que ves en la imagen. ¿La funcionalidad se ve exactamente como se pretendía? ¿El estilo es correcto? ¿Se cumplen los requisitos del usuario?
 
@@ -121,7 +121,7 @@ gh api repos/galiprandi/ants-garden/issues/$PR_NUMBER/comments \
 **Ejemplo concreto:**
 ```bash
 gh api repos/galiprandi/ants-garden/issues/6/comments \
-  -f body='### Validación visual: Nuevo componente de input de número para Sudoku\n\n\n![screenshot](https://raw.githubusercontent.com/galiprandi/ants-garden/uma-refactor-sudoku-implement-core-gameplay/public/screenshots/number-pad.png)'
+  -f body='### Validación visual: Nuevo componente de input de número para Sudoku\n\n\n![screenshot](https://raw.githubusercontent.com/galiprandi/ants-garden/uma-refactor-sudoku-implement-core-gameplay/screenshots/number-pad.png)'
 ```
 
 **⚠️ IMPORTANTE:**
@@ -141,8 +141,8 @@ Ejemplo:
 ```python
 # Usando el comando de finalización con los resultados obtenidos:
 confirmar_verificacion_visual(
-    ruta_imagen='/test/verification/screenshots/verification.png',
-    rutas_media_adicional=['/test/verification/videos/video.webm']
+    ruta_imagen='screenshots/verification.png',
+    rutas_media_adicional=['videos/video.webm']
 )
 ```
 
