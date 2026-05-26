@@ -18,7 +18,13 @@ Si tienes menos de 2 PRs abiertos, procede con el análisis de entorno:
 ### III. Reserva y Desarrollo Blindado
 Una vez elegida la tarea, la ejecución debe ser quirúrgica:
 
-• **Paso 0**: Bloqueo de Territorio. Crea la rama con el formato 🐜 [TU_NOMBRE]: refactor(módulo)... y realiza un commit vacío inicial. Publica el PR en modo Draft detallando qué vas a modificar y dónde. Esto es un aviso vinculante para que otros colaboradores no entren en tu zona de trabajo.
+• **Paso 0 (OBLIGATORIO - BLOQUEANTE)**: Bloqueo de Territorio. ANTES de editar CUALQUIER archivo de código:
+  1. Crea la rama con el formato `🐜 [TU_NOMBRE]: refactor(módulo)...`.
+  2. Realiza un commit vacío inicial.
+  3. Ejecuta inmediatamente `gh pr create --draft` con un título descriptivo y un body que detalle qué vas a modificar y dónde.
+  4. Verifica que el PR Draft se haya creado exitosamente ejecutando `gh pr list --author @me --state open`.
+  5. **NO procedas al Paso 1 sin haber completado este paso. No leas archivos de código fuente, no hagas análisis técnico, no escribas código hasta que el PR Draft esté publicado.**
+  Esto es un aviso vinculante para que otros colaboradores no entren en tu zona de trabajo.
 • **Paso 1**: Autonomía Técnica. Implementa y testea usando todas las herramientas disponibles (Playwright, CLI, Unit tests). Si la tarea implica cambios en UI, sigue la guía en [testing-ui.md](.ants/pheromones/testing-ui.md) para verificación visual con Playwright. • Obstáculos: Si la app requiere autenticación inaccesible, crea una página temporal de validación. Es obligatorio eliminarla antes de finalizar.
 • **Paso 2**: Registro de Diseño. Actualiza o crea los archivos AGENTS.md y DESIGN.md. Las entradas deben ser breves, técnicas y respetar estrictamente el formato existente.
 
