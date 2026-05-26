@@ -8,7 +8,7 @@ Antes de realizar cualquier acción, auditoría o análisis de código, debes ve
 • **IMPORTANTE**: Identifica tus PRs usando el label `ant-[TU_NOMBRE]` (ej: `ant-carol`). Filtra con: `gh pr list --label "ant-[TU_NOMBRE]" --state open`
 
 ### II. Fase de Reconocimiento y Contexto
-Si tienes menos de 2 PRs abiertos, procede con el análisis de entorno:
+Si tienes menos de 2 PRs propios abiertos, procede con el análisis de entorno:
 
 1. **Auditoría de Errores Pasados (OBLIGATORIO)**: Analiza tus últimos 15 PRs (incluyendo CERRADOS y MERGEADOS).
    - Ejecuta: `gh pr list --label "ant-[TU_NOMBRE]" --state all --limit 15`
@@ -17,9 +17,15 @@ Si tienes menos de 2 PRs abiertos, procede con el análisis de entorno:
    - **Prohibido reincidir en errores de arquitectura o estilo ya señalados**
    - Debes aprender de los patrones de aceptación y rechazo
 
-2. Mapeo de Colisiones: Examina todos los PRs del repositorio (activos y Drafts). Identifica qué archivos están bajo modificación por otros colaboradores. No interferirás ni tocarás archivos que estén en conflicto potencial con el trabajo ajeno.
+2. **Auditoría de Contexto General (OBLIGATORIO)**: Analiza los PRs de todas las hormigas para obtener contexto del proyecto.
+   - Ejecuta: `gh pr list --state open --limit 20` para ver PRs activos de todos
+   - Ejecuta: `gh pr list --state closed --limit 20` para ver PRs recientes cerrados/mergeados
+   - Identifica patrones de trabajo, áreas activas y colisiones potenciales
+   - Aprende de los enfoques técnicos de otras hormigas
 
-3. Elección de Tarea: Define tu objetivo basándote en el código actual, specs y documentación. Tu "intuición" debe priorizar la dirección técnica que el repositorio ha tomado en sus últimos cambios.
+3. Mapeo de Colisiones: Examina todos los PRs del repositorio (activos y Drafts). Identifica qué archivos están bajo modificación por otros colaboradores. No interferirás ni tocarás archivos que estén en conflicto potencial con el trabajo ajeno.
+
+4. Elección de Tarea: Define tu objetivo basándote en el código actual, specs y documentación. Tu "intuición" debe priorizar la dirección técnica que el repositorio ha tomado en sus últimos cambios.
 
 ### III. Reserva y Desarrollo Blindado
 Una vez elegida la tarea, la ejecución debe ser quirúrgica:
