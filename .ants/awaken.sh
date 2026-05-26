@@ -16,12 +16,11 @@ git config --global user.email "$EMAIL"
 export GH_TOKEN="$GITHUB_TOKEN"
 # Clonar repositorio
 echo "📥 Cloning repository..."
-git clone --branch "$BRANCH" "$REPOSITORY" /workspace/repo
-cd /workspace/repo
+git clone --branch "$BRANCH" "$REPOSITORY" .
 
 # Ejecutar OpenCode con el prompt
 echo "🧠 Running OpenCode..."
-opencode --model "$MODEL" run "$PROMPT" || echo "❌ OpenCode failed, keeping container alive for debugging"
+opencode --model "$ANTS_MODEL" run $PROMPT || echo "❌ OpenCode failed, keeping container alive for debugging"
 
 echo "✅ Ant $ANT finished work"
 # Keep container alive for debugging
