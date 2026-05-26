@@ -9,7 +9,12 @@ Antes de realizar cualquier acción, auditoría o análisis de código, debes ve
 ### II. Fase de Reconocimiento y Contexto
 Si tienes menos de 2 PRs abiertos, procede con el análisis de entorno:
 
-1. Auditoría de Errores Pasados: Analiza tus últimos 15 PRs. Identifica los cierres sin integración y asimila el motivo del rechazo en los comentarios. Prohibido reincidir en errores de arquitectura o estilo ya señalados.
+1. **Auditoría de Errores Pasados (OBLIGATORIO)**: Analiza tus últimos 15 PRs (incluyendo CERRADOS y MERGEADOS).
+   - Ejecuta: `gh pr list --author @me --state all --limit 15`
+   - Para cada PR cerrado sin merge, lee los comentarios para entender el motivo del rechazo
+   - Para cada PR mergeado, lee los comentarios de revisión para entender qué se hizo bien
+   - **Prohibido reincidir en errores de arquitectura o estilo ya señalados**
+   - Debes aprender de los patrones de aceptación y rechazo
 
 2. Mapeo de Colisiones: Examina todos los PRs del repositorio (activos y Drafts). Identifica qué archivos están bajo modificación por otros colaboradores. No interferirás ni tocarás archivos que estén en conflicto potencial con el trabajo ajeno.
 
@@ -19,7 +24,7 @@ Si tienes menos de 2 PRs abiertos, procede con el análisis de entorno:
 Una vez elegida la tarea, la ejecución debe ser quirúrgica:
 
 • **Paso 0 (OBLIGATORIO - BLOQUEANTE)**: Bloqueo de Territorio. ANTES de editar CUALQUIER archivo de código:
-  1. Crea la rama con el formato `🐜 [TU_NOMBRE]: refactor(módulo)...`.
+  1. Crea la rama con el formato `[TU_NOMBRE]-refactor(modulo)-descripcion` (SIN emojis ni caracteres especiales que causen errores en git).
   2. Realiza un commit vacío inicial.
   3. Ejecuta inmediatamente `gh pr create --draft` con un título descriptivo y un body que detalle qué vas a modificar y dónde.
   4. Verifica que el PR Draft se haya creado exitosamente ejecutando `gh pr list --author @me --state open`.
