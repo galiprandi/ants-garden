@@ -34,3 +34,12 @@ The Ants Garden design system is inspired by nature and the organic feel of an a
 - Hover state: Background color change and subtle shadow increase.
 - Active state: Slight scale down (`active:scale-[0.98]`).
 - Interaction: Shine effect on hover.
+
+#### Sudoku Gameplay
+- **Cell Selection**: Selected cells highlighted with emerald 200/90 background and inner shadow
+- **Related Cells**: Same row/column/subgrid highlighted with emerald 50/40 background
+- **Matching Values**: Cells with same value as selected cell highlighted with amber 100/70 background and pulse animation
+- **Fixed Cells**: Pre-filled cells cannot be modified, appear with slate-800/extrabold text
+- **Error State**: Invalid entries show rose-50/80 background with rose-600 text
+- **Win State**: Correct completion shows celebratory message with emerald 50/90 background
+- **Number Pad**: On-screen input uses emerald 50/80 background with hover states
