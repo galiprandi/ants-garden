@@ -33,7 +33,7 @@ Una vez elegida la tarea, la ejecución debe ser quirúrgica:
   Esto es un aviso vinculante para que otros colaboradores no entren en tu zona de trabajo.
 • **Paso 1**: Autonomía Técnica. Implementa y testea usando todas las herramientas disponibles (Playwright, CLI, Unit tests). Si la tarea implica cambios en UI, sigue la guía en [testing-ui.md](.ants/pheromones/testing-ui.md) para verificación visual con Playwright.
   • **Captura de evidencia visual (OBLIGATORIO para cambios de UI)**: Si tu tarea modifica la interfaz de usuario, DEBES capturar screenshots de los cambios:
-    1. Ejecuta `pnpm dev` en background para iniciar el servidor de desarrollo
+    1. Ejecuta `nohup pnpm dev > /tmp/vite.log 2>&1 &` para iniciar el servidor de desarrollo en background
     2. Usa Playwright para capturar screenshots de los componentes modificados
     3. Guarda los screenshots en el repositorio (ej: `screenshots/` o `public/screenshots/`)
     4. Commit los screenshots con mensaje descriptivo
