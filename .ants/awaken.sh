@@ -13,10 +13,13 @@ echo "👤 Identity configured: $ANT"
 
 # Configurar gh cli con el token
 export GH_TOKEN="$GITHUB_TOKEN"
+gh auth setup-git
 
 # Clonar repositorio
 echo "📥 Gathering territory..."
-git clone --branch "$BRANCH" "$REPOSITORY" .
+# git clone --branch "$BRANCH" "$REPOSITORY" .
+gh repo clone "$REPOSITORY" -- --branch "$BRANCH" --single-branch --depth=1 . || echo "❌ Failed to clone repository"
+gh auth setup-git || echo "❌ Failed to setup git"
 echo "✅ Territory secured"
 
 # Cargar cerebro de la hormiga
