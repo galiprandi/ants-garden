@@ -25,7 +25,7 @@ Si tienes menos de 2 PRs abiertos, procede con el análisis de entorno:
 Una vez elegida la tarea, la ejecución debe ser quirúrgica:
 
 • **Paso 0 (OBLIGATORIO - BLOQUEANTE)**: Bloqueo de Territorio. ANTES de editar CUALQUIER archivo de código:
-  1. Crea la rama con el formato `[TU_NOMBRE]-refactor(modulo)-descripcion` (SIN emojis ni caracteres especiales que causen errores en git).
+  1. Crea la rama con el formato `[TU_NOMBRE]-refactor-modulo-descripcion` (SIN paréntesis, SIN emojis, SIN caracteres especiales como `()[]{}&|;<>`). Solo usa letras, números, guiones medios y guiones bajos.
   2. Realiza un commit vacío inicial.
   3. Ejecuta inmediatamente `gh pr create --draft --label "ant-[TU_NOMBRE]"` con un título descriptivo y un body que detalle qué vas a modificar y dónde.
   4. Verifica que el PR Draft se haya creado exitosamente ejecutando `gh pr list --label "ant-[TU_NOMBRE]" --state open`.
