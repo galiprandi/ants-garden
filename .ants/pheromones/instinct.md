@@ -5,12 +5,13 @@
 Antes de realizar cualquier acción, auditoría o análisis de código, debes verificar tu estado de carga de trabajo:
 • Condición: Si tienes 2 o más PRs propios abiertos (incluyendo Drafts), tu misión ha terminado.
 • Acción: Abandona el entorno inmediatamente. No analices código, no crees ramas y no generes logs. Tu cuota operativa está saturada.
+• **IMPORTANTE**: Identifica tus PRs usando el label `ant-[TU_NOMBRE]` (ej: `ant-carol`). Filtra con: `gh pr list --label "ant-[TU_NOMBRE]" --state open`
 
 ### II. Fase de Reconocimiento y Contexto
 Si tienes menos de 2 PRs abiertos, procede con el análisis de entorno:
 
 1. **Auditoría de Errores Pasados (OBLIGATORIO)**: Analiza tus últimos 15 PRs (incluyendo CERRADOS y MERGEADOS).
-   - Ejecuta: `gh pr list --author @me --state all --limit 15`
+   - Ejecuta: `gh pr list --label "ant-[TU_NOMBRE]" --state all --limit 15`
    - Para cada PR cerrado sin merge, lee los comentarios para entender el motivo del rechazo
    - Para cada PR mergeado, lee los comentarios de revisión para entender qué se hizo bien
    - **Prohibido reincidir en errores de arquitectura o estilo ya señalados**
@@ -26,8 +27,8 @@ Una vez elegida la tarea, la ejecución debe ser quirúrgica:
 • **Paso 0 (OBLIGATORIO - BLOQUEANTE)**: Bloqueo de Territorio. ANTES de editar CUALQUIER archivo de código:
   1. Crea la rama con el formato `[TU_NOMBRE]-refactor(modulo)-descripcion` (SIN emojis ni caracteres especiales que causen errores en git).
   2. Realiza un commit vacío inicial.
-  3. Ejecuta inmediatamente `gh pr create --draft` con un título descriptivo y un body que detalle qué vas a modificar y dónde.
-  4. Verifica que el PR Draft se haya creado exitosamente ejecutando `gh pr list --author @me --state open`.
+  3. Ejecuta inmediatamente `gh pr create --draft --label "ant-[TU_NOMBRE]"` con un título descriptivo y un body que detalle qué vas a modificar y dónde.
+  4. Verifica que el PR Draft se haya creado exitosamente ejecutando `gh pr list --label "ant-[TU_NOMBRE]" --state open`.
   5. **NO procedas al Paso 1 sin haber completado este paso. No leas archivos de código fuente, no hagas análisis técnico, no escribas código hasta que el PR Draft esté publicado.**
   Esto es un aviso vinculante para que otros colaboradores no entren en tu zona de trabajo.
 • **Paso 1**: Autonomía Técnica. Implementa y testea usando todas las herramientas disponibles (Playwright, CLI, Unit tests). Si la tarea implica cambios en UI, sigue la guía en [testing-ui.md](.ants/pheromones/testing-ui.md) para verificación visual con Playwright.
