@@ -10,13 +10,7 @@ const SudokuContainer: React.FC = () => {
   });
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [gameStatus, setGameStatus] = useState<'playing' | 'won'>('playing');
-  
-  const startNewGame = () => {
-    const puzzle = generateSudoku('medium');
-    setBoard(convertToSudokuBoard(puzzle.puzzle));
-    setSelectedCell(null);
-    setGameStatus('playing');
-  };
+  const [noteTakingEnabled, setNoteTakingEnabled] = useState<boolean>(false);
 
   const handleCellClick = (row: number, col: number) => {
     // Don't allow selecting fixed cells
@@ -34,29 +28,58 @@ const SudokuContainer: React.FC = () => {
     // Don't allow input on fixed cells
     if (board[row][col].isFixed) return;
     
-    // Validate the move
-    const isValid = validateMove(board, row, col, number);
-    
-    // Clear any existing error when user inputs a number
-    const newBoard = board.map((r, rIdx) =>
-      r.map((c, cIdx) => {
-        if (rIdx === row && cIdx === col) {
-          return {
-            ...c,
-            value: number,
-            isError: !isValid,
-            notes: [], // Clear notes when entering a definite value
-          };
-        }
-        return c;
-      })
-    );
-    
-    setBoard(newBoard);
-    
-    // Check if game is won after valid move
-    if (isValid && checkWinCondition(newBoard)) {
-      setGameStatus('won');
+    if (noteTakingEnabled) {
+      // Toggle note (pencil mark)
+      const newBoard = board.map((r, rIdx) =>
+        r.map((c, cIdx) => {
+          if (rIdx === row && cIdx === col) {
+            const notes = [...c.notes];
+            const noteIndex = notes.indexOf(number);
+            
+            if (noteIndex >= 0) {
+              // Remove note if it exists
+              notes.splice(noteIndex, 1);
+            } else {
+              // Add note if it doesn't exist
+              notes.push(number);
+            }
+            
+            return {
+              ...c,
+              notes,
+            };
+          }
+          return c;
+        })
+      );
+      
+      setBoard(newBoard);
+    } else {
+      // Set definite value
+      // Validate the move
+      const isValid = validateMove(board, row, col, number);
+      
+      // Clear any existing error when user inputs a number
+      const newBoard = board.map((r, rIdx) =>
+        r.map((c, cIdx) => {
+          if (rIdx === row && cIdx === col) {
+            return {
+              ...c,
+              value: number,
+              isError: !isValid,
+              notes: [], // Clear notes when entering a definite value
+            };
+          }
+          return c;
+        })
+      );
+      
+      setBoard(newBoard);
+      
+      // Check if game is won after valid move
+      if (isValid && checkWinCondition(newBoard)) {
+        setGameStatus('won');
+      }
     }
   };
 
@@ -165,19 +188,11 @@ const SudokuContainer: React.FC = () => {
     };
   }, [selectedCell, board, gameStatus]);
 
-  return (
-    <div className="flex flex-col items-center gap-8 p-4 min-h-screen" tabIndex={0} onKeyDown={() => {}}>
+   return (
+     <div className="flex flex-col items-center gap-8 p-4 min-h-screen" tabIndex={0} onKeyDown={() => {}}>
        <div className="text-center">
          <h2 className="text-3xl font-bold text-emerald-900">Sudoku Challenge</h2>
          <p className="text-emerald-700/60">Test your logic, ant!</p>
-         
-         {/* New Game button - always visible */}
-         <button 
-           onClick={startNewGame}
-           className="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors duration-200 shadow-md font-medium"
-         >
-           New Game
-         </button>
          
          {/* Win message */}
          {gameStatus === 'won' && (
@@ -187,33 +202,51 @@ const SudokuContainer: React.FC = () => {
            </div>
          )}
        </div>
-      
-      <SudokuGrid 
-        board={board} 
-        onCellClick={handleCellClick}
-        selectedCell={selectedCell}
-      />
-      
-      {/* Number Pad - only show when playing and cell is selected and not fixed */}
-      {gameStatus === 'playing' && selectedCell && !board[selectedCell.row][selectedCell.col].isFixed && (
-        <div className="grid grid-cols-3 gap-2">
-          {[1,2,3,4,5,6,7,8,9].map(num => (
-            <button
-              key={num}
-              onClick={() => handleNumberInput(num)}
-              className="w-full h-12 text-lg font-bold text-emerald-900 bg-emerald-50/80 rounded-lg hover:bg-emerald-100 transition-colors duration-200 shadow-md"
-            >
-              {num}
-            </button>
-          ))}
-        </div>
-      )}
-      
-      <div className="text-sm text-emerald-800/40">
-        <p>Design System: Ants Garden v1.0</p>
-      </div>
-    </div>
-  );
-};
+       
+       {/* Note-taking toggle */}
+       <div className="flex items-center gap-2">
+         <button
+           onClick={() => setNoteTakingEnabled(!noteTakingEnabled)}
+           className={`w-10 h-10 flex items-center justify-center rounded-lg 
+           ${noteTakingEnabled ? 'bg-emerald-200/90 text-emerald-900 font-bold shadow-md' : 'bg-emerald-50/80 hover:bg-emerald-100/80 text-emerald-600/80'}`}
+         >
+           {noteTakingEnabled ? '✏️' : '🔢'}
+         </button>
+         <span className="text-sm text-emerald-600/60">
+           {noteTakingEnabled ? 'Modo notas' : 'Modo números'}
+         </span>
+       </div>
+       
+       <SudokuGrid 
+         board={board} 
+         onCellClick={handleCellClick}
+         selectedCell={selectedCell}
+         noteTakingEnabled={noteTakingEnabled}
+       />
+       
+       {/* Number Pad - only show when playing and cell is selected and not fixed */}
+       {gameStatus === 'playing' && selectedCell && !board[selectedCell.row][selectedCell.col].isFixed && (
+         <div className="grid grid-cols-3 gap-2">
+           {[1,2,3,4,5,6,7,8,9].map(num => (
+             <button
+               key={num}
+               onClick={() => handleNumberInput(num)}
+               className={`w-full h-12 text-lg font-bold 
+               ${noteTakingEnabled ? 'bg-emerald-50/60 text-emerald-600/80 hover:bg-emerald-100/80' : 'text-emerald-900 bg-emerald-50/80 rounded-lg hover:bg-emerald-100 transition-colors duration-200 shadow-md'}
+               ${noteTakingEnabled && board[selectedCell.row][selectedCell.col].notes.includes(num) ? 'bg-emerald-200/70 text-emerald-900 font-bold' : ''}
+               ${!noteTakingEnabled && 'text-emerald-900 bg-emerald-50/80 rounded-lg hover:bg-emerald-100 transition-colors duration-200 shadow-md'}`}
+             >
+               {num}
+             </button>
+           ))}
+         </div>
+       )}
+       
+       <div className="text-sm text-emerald-800/40">
+         <p>Design System: Ants Garden v1.0</p>
+       </div>
+     </div>
+   );
+ };
 
 export default SudokuContainer;

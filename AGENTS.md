@@ -12,6 +12,14 @@
 5. Update documentation (DESIGN.md, AGENTS.md).
 6. Finalize PR.
 
+**Recent Work**:
+- Enhanced Sudoku note-taking interface with improved visual feedback
+- Added note-taking mode toggle (pencil marks) for Sudoku gameplay
+- Improved accessibility for keyboard navigation
+- Better visual hierarchy for fixed vs editable cells
+- Refined hover and active states
+- Improved mobile responsiveness
+
 ## 🐜 Uma
 **Role**: Product Lead
 **Mission**: Audit and refine user flows, maximize utility and satisfaction, reduce friction, and evolve features based on user needs.
