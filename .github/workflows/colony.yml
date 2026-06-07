@@ -16,17 +16,58 @@ on:
         default: 'gemini-2.5-flash'
 
 jobs:
+  build-image:
+    name: 🏗️ Build Ant Body
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: 🕳️ Checkout
+        uses: actions/checkout@v6
+
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔐 Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: 🏗️ Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .ants
+          file: body
+          push: true
+          tags: ghcr.io/${{ github.repository }}/ant-body:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
   working:
     name: 🐜 Ant Mission
+    needs: build-image
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}/ant-body:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+      entrypoint: [""]
+      options: --user root
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
     permissions:
       id-token: write
       pull-requests: write
       contents: write
+      packages: read
     env:
       GH_TOKEN: ${{ github.token }}
       ANTS_AI_KEY: ${{ secrets.ANTS_AI_KEY }}
-    
+
     steps:
       - name: 🕳️ Descending into the Anthill
         uses: actions/checkout@v6
@@ -70,12 +111,12 @@ jobs:
           FILE_NAME=$(echo "${{ env.AGENT }}" | tr '[:upper:]' '[:lower:]')
           BRAIN_FILE=".ants/gallery/${FILE_NAME}.md"
           INSTINCT_FILE=".ants/pheromones/instinct.md"
-          
-          if [ ! -f "$BRAIN_FILE" ]; then 
+
+          if [ ! -f "$BRAIN_FILE" ]; then
             echo "❌ Error: Memory $BRAIN_FILE not found in gallery."
-            exit 1 
+            exit 1
           fi
-          
+
           # Robust multiline technique for GITHUB_OUTPUT
           {
             echo "prompt<<EOF"
@@ -89,34 +130,18 @@ jobs:
             echo ""
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
-          
+
           echo "🧠 $FILE_NAME memory and instincts loaded into ganglia."
 
       - name: 🛠️ Install Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ripgrep
+          apt-get update
+          apt-get install -y ripgrep docker.io
 
-      - name: 🔍 Verify MCP Servers
+      - name: ⚡ Install uv
         run: |
-          echo "Checking installed tools..."
-          which rg
-          rg --version
-          echo "Checking Node.js..."
-          node --version
-          npm --version
-          echo "Checking uvx..."
-          uvx --version || echo "uvx not available"
-          echo "Checking docker..."
-          docker --version
-
-      - name: 🔧 List Gemini CLI Tools
-        run: |
-          echo "=== Available Gemini CLI Tools ==="
-          gemini --help || true
-          echo ""
-          echo "=== Gemini CLI Version ==="
-          gemini --version || true
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: 🐜 Awakening the Drone
         uses: 'google-github-actions/run-gemini-cli@v0.1.22'
@@ -220,9 +245,9 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Artifacts" >> $GITHUB_STEP_SUMMARY
           echo "- 📊 [Telemetry](../actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
-          echo "- � [Gemini Artifacts](../actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "- 📎 [Gemini Artifacts](../actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
 
-      - name: �� Debug Gemini CLI Output
+      - name: 🔍 Debug Gemini CLI Output
         if: always()
         run: |
           echo "=== Gemini CLI Response ==="
